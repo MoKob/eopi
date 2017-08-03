@@ -8,7 +8,7 @@ namespace eopi {
 namespace bits {
 
 // compile-time look-up table to compute the parity of a value
-template <std::uint16_t SIZE>
+template <std::uint32_t SIZE>
 struct ParityLookupTable {
     constexpr ParityLookupTable() {
         // divide and conquer (parity X = parity [0:7] ^ parity[8:15]
@@ -24,15 +24,14 @@ struct ParityLookupTable {
         }
     }
 
-    std::bitset<SIZE> parity;
+    std::bitset<SIZE+1> parity;
 };
 
 // storing the reversed bits of 16 bit integers
 struct ReverseLookupTable {
-    constexpr ReverseLookupTable() : reversed()
-    {
-        for (std::uint16_t i = 0; i < std::numeric_limits<std::uint16_t>::max(); ++i)
-        {
+    constexpr ReverseLookupTable() : reversed() {
+        for (std::uint16_t i = 0; i < std::numeric_limits<std::uint16_t>::max();
+             ++i) {
             auto value = i;
             reversed[i] = 0;
             for (int bit = 0; bit < 15; ++bit) {
@@ -42,11 +41,41 @@ struct ReverseLookupTable {
             }
             reversed[i] |= value & 1;
         }
-        reversed[std::numeric_limits<std::uint16_t>::max()] = std::numeric_limits<std::uint16_t>::max();
+        reversed[std::numeric_limits<std::uint16_t>::max()] =
+            std::numeric_limits<std::uint16_t>::max();
     }
 
-    std::uint16_t reversed[std::numeric_limits<std::uint16_t>::max()+1];
+    std::uint16_t reversed[std::numeric_limits<std::uint16_t>::max() + 1];
 };
+
+struct WeightLookupTable {
+    constexpr WeightLookupTable() : weight() {
+        for (std::uint16_t i = 0; i < std::numeric_limits<std::uint16_t>::max();
+             ++i) {
+            weight[i] = 0;
+            for (int bit = 0; bit < 16; ++bit) {
+                weight[i] += (i & (1 << bit)) != 0 ? 1 : 0;
+            }
+        }
+        weight[std::numeric_limits<std::uint16_t>::max()] = 16;
+    }
+
+    std::uint16_t weight[std::numeric_limits<std::uint16_t>::max() + 1];
+};
+
+// returns the cardinality of bits set within a 64 bit integer
+inline std::uint32_t
+weight(std::uint64_t value) {
+    auto const constexpr mask = std::numeric_limits<std::uint16_t>::max();
+    static const WeightLookupTable lookup;
+    std::uint32_t weight = lookup.weight[value & mask];
+    value >>= 16;
+    weight += lookup.weight[value & mask];
+    value >>= 16;
+    weight += lookup.weight[value & mask];
+    value >>= 16;
+    return weight + lookup.weight[value];
+}
 
 // compute parity in chunks of four precomputed values
 inline bool parity(std::uint64_t value) {
@@ -83,6 +112,21 @@ inline std::uint64_t reverse(std::uint64_t value) {
     result |= lookup.reversed[value];
     return result;
 }
+
+// returns the number with the lowest difference to value that has the same
+// weight (number of bits set) as value. Requires not 0 / not uint64_t_max
+inline std::uint64_t nearest_same_weight(std::uint64_t value)
+{
+    for(std::uint32_t i = 0; i < 63; ++i)
+    {
+        // find the first two consecutive bits that differ
+        if( ((value >> i) &1) != ((value >> (i+1))&1))
+            return swap(value,i,i+1);
+    }
+
+    throw("Invalid argument");
+}
+
 
 }  // namespace bits
 }  // namespace eopi
