@@ -1,5 +1,6 @@
 #include "bit_operations.hpp"
 #include "math.hpp"
+#include "conversion.hpp"
 
 #include <bitset>
 #include <cstdint>
@@ -49,5 +50,9 @@ int main() {
          << eopi::bits::divide_without_operators(127 * 123456, 127) << endl;
 
     cout << "Power: " << setprecision(12) << eopi::bits::power(42.0,7) << " Should be 230539333248" << std::endl;
+
+
+    auto val = eopi::bits::convert_base("1011101",2,10);
+    cout << "Binary: 1011101 equals: " << val << std::endl;
     return 0;
 }
