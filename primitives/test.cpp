@@ -35,10 +35,16 @@ int main() {
     cout << "Parity of: " << bitset<64>(value) << ": "
          << eopi::bits::parity(value) << endl;
 
-    cout << "Closest to " << 7 << "(" << eopi::bits::weight(7) << " - " << std::bitset<8>(7) << ") is "
-         << eopi::bits::nearest_same_weight(7) << "(" << std::bitset<8>(eopi::bits::nearest_same_weight(7)) << ") which als has weight: "
+    cout << "Closest to " << 7 << "(" << eopi::bits::weight(7) << " - "
+         << std::bitset<8>(7) << ") is " << eopi::bits::nearest_same_weight(7)
+         << "(" << std::bitset<8>(eopi::bits::nearest_same_weight(7))
+         << ") which als has weight: "
          << eopi::bits::weight(eopi::bits::nearest_same_weight(7)) << endl;
 
-    cout << "Multiply Bitwise: " << eopi::bits::multiply_bitwise(13,42) << " Should be: " << 13*42 << std::endl;
+    cout << "Multiply Bitwise: " << eopi::bits::multiply_bitwise(13, 42)
+         << " Should be: " << 13 * 42 << std::endl;
+
+    cout << "Divisin: " << 127 * 123456 << " by 127 "
+         << eopi::bits::divide_without_operators(127 * 123456, 127) << endl;
     return 0;
 }

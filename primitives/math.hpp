@@ -48,6 +48,37 @@ inline std::uint64_t multiply_bitwise(std::uint64_t lhs, std::uint32_t rhs) {
     return result;
 }
 
+
+// division (without remainder) using only shift/operator- and comparisons
+inline std::uint64_t divide_without_operators(std::uint64_t dividend, std::uint64_t divisor)
+{
+    // ensure we will terminate
+    if( divisor == 0 )
+        throw("Invalid argument, dividing by zero");
+
+    std::uint64_t divisor_times_2_n = divisor;
+    std::uint32_t power = 1;
+    // find the largest n so that 2^n * divisor < dividend
+    while( divisor_times_2_n < dividend )
+    {
+        divisor_times_2_n <<= 1;
+        power <<= 1;
+    }
+
+    std::uint64_t result = 0;
+    while( dividend >= divisor )
+    {
+        if( divisor_times_2_n <= dividend )
+        {
+            result |= power;
+            dividend -= divisor_times_2_n;
+        }
+        divisor_times_2_n >>=1;
+        power >>= 1;
+    }
+    return result;
+}
+
 }  // namespace bits
 }  // namespace eopi
 
