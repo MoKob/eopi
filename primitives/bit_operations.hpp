@@ -1,3 +1,6 @@
+#ifndef EOPI_PRIMITIVES_BIT_OPERATIONS_HPP_
+#define EOPI_PRIMITIVES_BIT_OPERATIONS_HPP_
+
 #include <bitset>
 #include <cstdint>
 #include <limits>
@@ -130,3 +133,5 @@ inline std::uint64_t nearest_same_weight(std::uint64_t value)
 
 }  // namespace bits
 }  // namespace eopi
+
+#endif // EOPI_PRIMITIVES_BIT_OPERATIONS_HPP_
