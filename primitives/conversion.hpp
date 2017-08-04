@@ -73,6 +73,19 @@ inline std::uint64_t spreadsheet_encoding(std::string const& spread )
     return encoding;
 }
 
+// reverse the digits of a number
+inline std::uint64_t reverse_digits(std::uint64_t in_digits)
+{
+    std::uint64_t digits = 0;
+    while(in_digits)
+    {
+        digits *= 10;
+        digits += in_digits % 10;
+        in_digits /= 10;
+    }
+    return digits;
+}
+
 }  // namespace bits
 }  // namespace eopi
 

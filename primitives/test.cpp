@@ -56,5 +56,6 @@ int main() {
     cout << "Binary: 1011101 equals: " << val << std::endl;
 
     cout << "Spreadsheet: A: " << eopi::bits::spreadsheet_encoding("A") << " AA: " << eopi::bits::spreadsheet_encoding("AA") << " Z: " << eopi::bits::spreadsheet_encoding("Z") << " AZ: " << eopi::bits::spreadsheet_encoding("AZ") << endl;
+    cout << "Reverse 12345678: " << eopi::bits::reverse_digits(12345678) << std::endl;
     return 0;
 }
