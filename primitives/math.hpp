@@ -79,6 +79,26 @@ inline std::uint64_t divide_without_operators(std::uint64_t dividend, std::uint6
     return result;
 }
 
+// compute the power of x via square and multiply
+inline double power(double x, std::uint32_t power)
+{
+    double result = 1;
+
+    // multiply the powers of two onto result
+    // x x^2 x^4 ...
+    // which represents the binary form of the power
+    while(power)
+    {
+        if(power&1)
+            result *= x;
+
+        x = x*x;
+
+        power>>=1;
+    }
+    return result;
+}
+
 }  // namespace bits
 }  // namespace eopi
 

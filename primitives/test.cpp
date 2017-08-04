@@ -4,6 +4,7 @@
 #include <bitset>
 #include <cstdint>
 #include <iostream>
+#include <iomanip>
 #include <limits>
 
 using namespace std;
@@ -46,5 +47,7 @@ int main() {
 
     cout << "Divisin: " << 127 * 123456 << " by 127 "
          << eopi::bits::divide_without_operators(127 * 123456, 127) << endl;
+
+    cout << "Power: " << setprecision(12) << eopi::bits::power(42.0,7) << " Should be 230539333248" << std::endl;
     return 0;
 }
