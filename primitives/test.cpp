@@ -54,5 +54,7 @@ int main() {
 
     auto val = eopi::bits::convert_base("1011101",2,10);
     cout << "Binary: 1011101 equals: " << val << std::endl;
+
+    cout << "Spreadsheet: A: " << eopi::bits::spreadsheet_encoding("A") << " AA: " << eopi::bits::spreadsheet_encoding("AA") << " Z: " << eopi::bits::spreadsheet_encoding("Z") << " AZ: " << eopi::bits::spreadsheet_encoding("AZ") << endl;
     return 0;
 }

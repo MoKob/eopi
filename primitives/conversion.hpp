@@ -60,6 +60,19 @@ inline std::string convert_base(std::string input, const std::uint32_t base,
     return result;
 }
 
+
+// convert a spreadsheet encoding to the corresponding integer
+inline std::uint64_t spreadsheet_encoding(std::string const& spread )
+{
+    std::uint64_t encoding = 0;
+    for( auto c : spread)
+    {
+        encoding *= 26;
+        encoding +=  c - 'A' + 1;
+    }
+    return encoding;
+}
+
 }  // namespace bits
 }  // namespace eopi
 
