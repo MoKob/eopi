@@ -1,12 +1,13 @@
 #include "bit_operations.hpp"
-#include "math.hpp"
 #include "conversion.hpp"
+#include "math.hpp"
 
 #include <bitset>
 #include <cstdint>
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 #include <limits>
+#include <cstdlib>
 
 using namespace std;
 
@@ -49,13 +50,28 @@ int main() {
     cout << "Divisin: " << 127 * 123456 << " by 127 "
          << eopi::bits::divide_without_operators(127 * 123456, 127) << endl;
 
-    cout << "Power: " << setprecision(12) << eopi::bits::power(42.0,7) << " Should be 230539333248" << std::endl;
+    cout << "Power: " << setprecision(12) << eopi::bits::power(42.0, 7)
+         << " Should be 230539333248" << std::endl;
 
-
-    auto val = eopi::bits::convert_base("1011101",2,10);
+    auto val = eopi::bits::convert_base("1011101", 2, 10);
     cout << "Binary: 1011101 equals: " << val << std::endl;
 
-    cout << "Spreadsheet: A: " << eopi::bits::spreadsheet_encoding("A") << " AA: " << eopi::bits::spreadsheet_encoding("AA") << " Z: " << eopi::bits::spreadsheet_encoding("Z") << " AZ: " << eopi::bits::spreadsheet_encoding("AZ") << endl;
-    cout << "Reverse 12345678: " << eopi::bits::reverse_digits(12345678) << std::endl;
+    cout << "Spreadsheet: A: " << eopi::bits::spreadsheet_encoding("A")
+         << " AA: " << eopi::bits::spreadsheet_encoding("AA")
+         << " Z: " << eopi::bits::spreadsheet_encoding("Z")
+         << " AZ: " << eopi::bits::spreadsheet_encoding("AZ") << endl;
+    cout << "Reverse 12345678: " << eopi::bits::reverse_digits(12345678)
+         << std::endl;
+
+    cout << "Palindromes: " << eopi::bits::is_palindrome(111) << " (111) "
+         << eopi::bits::is_palindrome(122) << " (122) "
+         << eopi::bits::is_palindrome(121121) << " (121121)"
+         << eopi::bits::is_palindrome(7) << " (7)" << endl;
+
+    std::srand(time(NULL));
+    cout << "Rng (2-5): " << eopi::bits::rng_coin(2, 5) << " "
+         << eopi::bits::rng_coin(2, 5) << " " << eopi::bits::rng_coin(2, 5)
+         << " " << eopi::bits::rng_coin(2, 5) << " "
+         << eopi::bits::rng_coin(2, 5) << std::endl;
     return 0;
 }
