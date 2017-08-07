@@ -8,7 +8,7 @@
 #include <iostream>
 
 namespace eopi {
-namespace bits {
+namespace primitives {
 
 // compile-time look-up table to compute the parity of a value
 template <std::uint32_t SIZE>
@@ -131,7 +131,7 @@ inline std::uint64_t nearest_same_weight(std::uint64_t value)
 }
 
 
-}  // namespace bits
+}  // namespace primitives
 }  // namespace eopi
 
 #endif // EOPI_PRIMITIVES_BIT_OPERATIONS_HPP_

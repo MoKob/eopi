@@ -9,7 +9,7 @@
 #include "bit_operations.hpp"
 
 namespace eopi {
-namespace bits {
+namespace primitives {
 
 // unreasonable implementation of addition using a full adder for i1,i2,carry ->
 // sum,carry
@@ -130,7 +130,7 @@ inline std::uint64_t rng_coin(std::uint64_t from, std::uint64_t to) {
     return rng_internal(to - from) + from;
 }
 
-}  // namespace bits
+}  // namespace primitives
 }  // namespace eopi
 
 #endif  // EOPI_PRIMITIVES_MATH_HPP_

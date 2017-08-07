@@ -6,7 +6,7 @@
 #include <string>
 
 namespace eopi {
-namespace bits {
+namespace primitives {
 
 // convert a string given in base `a` into a string of base `b`. This only
 // works, as long as the encoded integer in input fits a 64bit unsigned
@@ -86,7 +86,7 @@ inline std::uint64_t reverse_digits(std::uint64_t in_digits)
     return digits;
 }
 
-}  // namespace bits
+}  // namespace primitives
 }  // namespace eopi
 
 #endif  // EOPI_PRIMITIVES_CONVERSION_HPP_
