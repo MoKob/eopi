@@ -74,9 +74,9 @@ class BigInt {
     }
 
     // multiply by an int
-    friend BitInt operator*(BigInt const& lhs, std::int32_t rhs){
+    friend BigInt operator*(BigInt lhs, std::int32_t rhs){
         std::int64_t carry = 0;
-        for( auto &digit : digits )
+        for( auto &digit : lhs.digits )
         {
             digit = digit * rhs + carry;
             carry = digit / CARRY_FROM;
@@ -89,7 +89,7 @@ class BigInt {
                 digit %= CARRY_FROM;
         }
         if( carry )
-            digits.push_back(carry);
+            lhs.digits.push_back(carry);
         return lhs;
     }
 
@@ -105,7 +105,7 @@ class BigInt {
 
         // can treat all digits as aboslute values now
 
-        result.back *= sign;
+        result.digits.back() *= sign;
         return result;
     }
 

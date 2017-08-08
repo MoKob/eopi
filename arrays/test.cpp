@@ -5,6 +5,7 @@
 
 #include "algorithms.hpp"
 #include "bigint.hpp"
+#include "randoms.hpp"
 
 using namespace std;
 
@@ -33,5 +34,11 @@ int main() {
     cout << nine << "++ = " << ++nine << endl;
     eopi::arrays::BigInt minus("-1000000000");
     cout << minus << "++ = " << ++minus << endl;
+
+
+    // boardgames:
+    vector<std::uint32_t> winable = {1,3,0,0,4,0,0,0};
+    vector<std::uint32_t> not_winable = {1,3,0,0,0,4,0,1};
+    cout << "Winable: " << eopi::arrays::is_boardgame_winable(winable) << " Not Winable: " << eopi::arrays::is_boardgame_winable(not_winable) << endl;
     return 0;
 }
