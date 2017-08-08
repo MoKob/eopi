@@ -47,6 +47,20 @@ void three_way_partition(const iterator_type begin, const iterator_type end, con
     three_way_partition(begin,end,pivot,std::less<pivot_type>());
 }
 
+template<typename iterator_type, typename key_type>
+iterator_type remove( iterator_type const begin, iterator_type const end, key_type const key)
+{
+    auto new_end = begin;   //all elements before new_end are != key
+
+    for( auto itr = begin; itr != end; ++itr )
+    {
+        if( *itr != key )
+            *new_end++ = *itr;
+    }
+
+    return new_end;
+}
+
 }  // namespace arrays
 }  // namespace eopi
 

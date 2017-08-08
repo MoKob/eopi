@@ -10,7 +10,8 @@
 using namespace std;
 
 
-void print(vector<int> const& vec)
+template<typename int_type>
+void print(vector<int_type> const& vec)
 {
     cout << "[vector]";
     for( auto e : vec )
@@ -40,5 +41,11 @@ int main() {
     vector<std::uint32_t> winable = {1,3,0,0,4,0,0,0};
     vector<std::uint32_t> not_winable = {1,3,0,0,0,4,0,1};
     cout << "Winable: " << eopi::arrays::is_boardgame_winable(winable) << " Not Winable: " << eopi::arrays::is_boardgame_winable(not_winable) << endl;
+
+    cout << "Removing 0 from:\n";
+    print(winable);
+    auto new_end = eopi::arrays::remove(winable.begin(),winable.end(),0);
+    winable.erase(new_end,winable.end());
+    print(winable);
     return 0;
 }
