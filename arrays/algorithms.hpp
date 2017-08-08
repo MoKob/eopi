@@ -51,13 +51,35 @@ template<typename iterator_type, typename key_type>
 iterator_type remove( iterator_type const begin, iterator_type const end, key_type const key)
 {
     auto new_end = begin;   //all elements before new_end are != key
-
-    for( auto itr = begin; itr != end; ++itr )
+    auto itr = begin;
+    while( itr != end )
     {
         if( *itr != key )
             *new_end++ = *itr;
+        ++itr;
     }
 
+    return new_end;
+}
+
+template<typename iterator_type>
+iterator_type unique( iterator_type const begin, iterator_type const end)
+{
+    if( begin == end )
+        return end;
+
+    auto new_end = begin+1;   // all elements prior to new_end are unique
+    auto itr = new_end;
+    while( itr != end )
+    {
+        // new element found
+        if( *(new_end-1) != *itr )
+        {
+            *new_end = *itr;
+            ++new_end;
+        }
+        ++itr;
+    }
     return new_end;
 }
 

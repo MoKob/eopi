@@ -47,5 +47,13 @@ int main() {
     auto new_end = eopi::arrays::remove(winable.begin(),winable.end(),0);
     winable.erase(new_end,winable.end());
     print(winable);
+
+    vector<std::uint32_t> unique_input = {1,1,2,2,2,3,4,4,5};
+    print(unique_input);
+    cout << "After unique\n";
+    auto new_end_unique = eopi::arrays::unique(unique_input.begin(), unique_input.end());
+    unique_input.erase(new_end_unique,unique_input.end());
+    print(unique_input);
+
     return 0;
 }
