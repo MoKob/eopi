@@ -3,8 +3,8 @@
 
 #include <bitset>
 #include <cmath>
-#include <cstdlib>
 #include <cstdint>
+#include <cstdlib>
 
 #include "bit_operations.hpp"
 
@@ -116,8 +116,7 @@ inline std::uint64_t rng_coin(std::uint64_t from, std::uint64_t to) {
             std::uint32_t shift = 1;
             // set random bits
             while (shift <= max) {
-                if( coin() )
-                    result |= shift;
+                if (coin()) result |= shift;
                 shift <<= 1;
             }
 
@@ -128,6 +127,24 @@ inline std::uint64_t rng_coin(std::uint64_t from, std::uint64_t to) {
 
     // translate into zero to max
     return rng_internal(to - from) + from;
+}
+
+// computing the greatest common divisor using euclids algorithms
+std::uint64_t gcd(std::uint64_t a, std::uint64_t b) {
+    while (true) {
+        // basic assumption, a needs to be larger
+        if (a < b) std::swap(a, b);
+        // a = x*b + c
+        auto x = a / b;
+        auto c = a % b;
+
+        if (c == 0) return b;
+
+        // a == b*x+c, gcd of (b*x + c) and b needs to be dividing c and b
+        // (which also covers b*x). Continue to find the gcd of b and c
+        a = b;
+        b = c;
+    }
 }
 
 }  // namespace primitives

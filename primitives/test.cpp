@@ -90,5 +90,11 @@ int main() {
 
     cout << "Open doors:\n";
     eopi::primitives::fivehundred_doors();
+
+    cout << "GCD:\n"
+         << "3,12: " << eopi::primitives::gcd(3,12) << "\n"
+         << "1,12: " << eopi::primitives::gcd(1,12) << "\n"
+         << "17,53: " << eopi::primitives::gcd(17,53) << "\n"
+         << "1071,462: " << eopi::primitives::gcd(1071,462) << "\n";
     return 0;
 }
