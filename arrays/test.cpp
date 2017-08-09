@@ -55,5 +55,9 @@ int main() {
     unique_input.erase(new_end_unique,unique_input.end());
     print(unique_input);
 
+    vector<std::int32_t> missing_int = {-1,1,3,2,4,-1,9,0};
+    print(missing_int);
+    cout << "Missing in ^ is: " << eopi::arrays::smallest_missing_positive(missing_int) << endl;
+
     return 0;
 }

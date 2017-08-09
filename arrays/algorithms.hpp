@@ -10,71 +10,64 @@ namespace arrays {
 
 // three wya partition
 // input: an array of values, comparable for less
-// output and array with the elements less | equal | greater to the pivot element
+// output and array with the elements less | equal | greater to the pivot
+// element
 // less needs to allow comp(pivot,*itr) and comp(*itr,pivot)
-template<typename iterator_type, typename pivot_type, typename comparator_type>
-void three_way_partition(const iterator_type begin, const iterator_type end, const pivot_type pivot, comparator_type less)
-{
+template <typename iterator_type, typename pivot_type, typename comparator_type>
+void three_way_partition(const iterator_type begin, const iterator_type end,
+                         const pivot_type pivot, comparator_type less) {
     static_assert(
         std::is_convertible<std::random_access_iterator_tag,
-                         typename std::iterator_traits<iterator_type>::iterator_category>::value,
-        "The iterators for three_way_partition need to be convertable to random access iterators.");
+                            typename std::iterator_traits<
+                                iterator_type>::iterator_category>::value,
+        "The iterators for three_way_partition need to be convertable to "
+        "random access iterators.");
 
     auto smaller = begin, equal = begin, larger = end;
-    while( equal != larger )
-    {
-        if( less(*equal,pivot) )
-        {
+    while (equal != larger) {
+        if (less(*equal, pivot)) {
             // element at equal is less than pivot
             std::swap(*smaller, *equal);
             ++smaller, ++equal;
-        } else if( less(pivot,*equal) )
-        {
+        } else if (less(pivot, *equal)) {
             // element at *equal is larger and can be stored at the end
             --larger;
-            std::swap(*equal,*larger);
-        } else
-        {
+            std::swap(*equal, *larger);
+        } else {
             // element is equal
             ++equal;
         }
     }
 }
 
-template<typename iterator_type, typename pivot_type>
-void three_way_partition(const iterator_type begin, const iterator_type end, const pivot_type pivot)
-{
-    three_way_partition(begin,end,pivot,std::less<pivot_type>());
+template <typename iterator_type, typename pivot_type>
+void three_way_partition(const iterator_type begin, const iterator_type end,
+                         const pivot_type pivot) {
+    three_way_partition(begin, end, pivot, std::less<pivot_type>());
 }
 
-template<typename iterator_type, typename key_type>
-iterator_type remove( iterator_type const begin, iterator_type const end, key_type const key)
-{
-    auto new_end = begin;   //all elements before new_end are != key
+template <typename iterator_type, typename key_type>
+iterator_type remove(iterator_type const begin, iterator_type const end,
+                     key_type const key) {
+    auto new_end = begin;  // all elements before new_end are != key
     auto itr = begin;
-    while( itr != end )
-    {
-        if( *itr != key )
-            *new_end++ = *itr;
+    while (itr != end) {
+        if (*itr != key) *new_end++ = *itr;
         ++itr;
     }
 
     return new_end;
 }
 
-template<typename iterator_type>
-iterator_type unique( iterator_type const begin, iterator_type const end)
-{
-    if( begin == end )
-        return end;
+template <typename iterator_type>
+iterator_type unique(iterator_type const begin, iterator_type const end) {
+    if (begin == end) return end;
 
-    auto new_end = begin+1;   // all elements prior to new_end are unique
+    auto new_end = begin + 1;  // all elements prior to new_end are unique
     auto itr = new_end;
-    while( itr != end )
-    {
+    while (itr != end) {
         // new element found
-        if( *(new_end-1) != *itr )
-        {
+        if (*(new_end - 1) != *itr) {
             *new_end = *itr;
             ++new_end;
         }
@@ -83,7 +76,25 @@ iterator_type unique( iterator_type const begin, iterator_type const end)
     return new_end;
 }
 
+// find the smallest positive integer missing in data. Destroys the content of
+// data
+std::int32_t smallest_missing_positive(std::vector<std::int32_t> &data) {
+    for (std::size_t i = 0; i < data.size();) {
+        if (data[i] != i && data[i] < data.size() && data[i] >= 0) {
+            std::swap(data[i], data[data[i]]);
+        } else {
+            ++i;
+        }
+    }
+    for (std::size_t i = 0; i < data.size(); ++i) {
+        // all elements should now contain their identity
+        if (data[i] != i) return i;
+    }
+    // all integers present
+    return -1;
+}
+
 }  // namespace arrays
 }  // namespace eopi
 
-#endif //EOPI_ARRAYS_ALGORITHMS_HPP_
+#endif  // EOPI_ARRAYS_ALGORITHMS_HPP_
