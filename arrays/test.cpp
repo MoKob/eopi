@@ -62,7 +62,7 @@ int main() {
 
     vector<std::int32_t> heights = {-1,4,3,2,-2,2,3,0};
     print(heights);
-    cout << "Traversing heights requires a robot with capacity: " << battery_capacity(heights) << endl;
+    cout << "Traversing heights requires a robot with capacity: " << eopi::arrays::battery_capacity(heights) << endl;
 
     return 0;
 }
