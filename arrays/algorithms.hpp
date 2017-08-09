@@ -78,7 +78,7 @@ iterator_type unique(iterator_type const begin, iterator_type const end) {
 
 // find the smallest positive integer missing in data. Destroys the content of
 // data
-std::int32_t smallest_missing_positive(std::vector<std::int32_t> &data) {
+std::int32_t smallest_missing_positive(std::vector<std::int32_t>& data) {
     for (std::size_t i = 0; i < data.size();) {
         if (data[i] != i && data[i] < data.size() && data[i] >= 0) {
             std::swap(data[i], data[data[i]]);
@@ -92,6 +92,29 @@ std::int32_t smallest_missing_positive(std::vector<std::int32_t> &data) {
     }
     // all integers present
     return -1;
+}
+
+// running minimum
+std::int32_t battery_capacity(std::vector<std::int32_t> const& heights) {
+    // find the minimum b such that a little robot with capacity `b` in batter,
+    // perfect recuperation and potential energy == capacity can traverse the
+    // entire sequence
+    // The basic observations are: at the start and at every new low-point, the
+    // battery will be fully charged. We need to find the maximum difference
+    // between h_i and h_j with i < j.
+    if( heights.empty() )
+        return 0;
+
+    auto current_min = heights.front();
+    std::uint32_t diff = 0;
+    for( auto h : heights )
+    {
+        if( h < current_min )
+            current_min = h;
+        else
+            diff = std::max(diff,static_cast<std::uint32_t>(h-current_min));
+    }
+    return diff;
 }
 
 }  // namespace arrays

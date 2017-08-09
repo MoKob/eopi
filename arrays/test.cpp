@@ -59,5 +59,10 @@ int main() {
     print(missing_int);
     cout << "Missing in ^ is: " << eopi::arrays::smallest_missing_positive(missing_int) << endl;
 
+
+    vector<std::int32_t> heights = {-1,4,3,2,-2,2,3,0};
+    print(heights);
+    cout << "Traversing heights requires a robot with capacity: " << battery_capacity(heights) << endl;
+
     return 0;
 }
