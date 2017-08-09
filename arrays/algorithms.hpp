@@ -94,27 +94,79 @@ std::int32_t smallest_missing_positive(std::vector<std::int32_t>& data) {
     return -1;
 }
 
-// running minimum
-std::int32_t battery_capacity(std::vector<std::int32_t> const& heights) {
+std::uint32_t max_difference(std::vector<std::int32_t> const& values) {
     // find the minimum b such that a little robot with capacity `b` in batter,
     // perfect recuperation and potential energy == capacity can traverse the
     // entire sequence
     // The basic observations are: at the start and at every new low-point, the
     // battery will be fully charged. We need to find the maximum difference
     // between h_i and h_j with i < j.
-    if( heights.empty() )
-        return 0;
+    if (values.empty()) return 0;
 
-    auto current_min = heights.front();
+    auto current_min = values.front();
     std::uint32_t diff = 0;
-    for( auto h : heights )
-    {
-        if( h < current_min )
-            current_min = h;
+    for (auto val : values) {
+        if (val < current_min)
+            current_min = val;
         else
-            diff = std::max(diff,static_cast<std::uint32_t>(h-current_min));
+            diff =
+                std::max(diff, static_cast<std::uint32_t>(val - current_min));
     }
     return diff;
+}
+
+// find i < j < k < l such that values[j]-values[i] + values[k] - values[l]
+// maximal over all i,j,k,l
+std::uint64_t max_difference_twice(std::vector<std::int32_t> const& values) {
+    if (values.empty()) return 0;
+
+    // use additional storage to memorize max difference values for all v[j]
+    std::vector<std::uint32_t> best_forward(values.size());
+
+    auto current_min = values.front();
+    std::uint32_t diff = 0;
+
+    auto const best_diff_until = [&](auto const val) {
+        if (val < current_min) current_min = val;
+
+        return diff = std::max(diff,
+                               static_cast<std::uint32_t>(val - current_min));
+    };
+    // store the best differences into best_forward
+    std::transform(values.begin(), values.end(), best_forward.begin(),
+                   best_diff_until);
+
+    // now to a backwards pass and compute the maximum from the first_half and
+    // the second half in combination
+    std::uint32_t total_best = 0;
+    diff = 0;
+    auto current_max = values.back();
+    for (std::size_t i = 0; i < values.size(); ++i) {
+        auto val = values[values.size() - i - 1];
+        if (val > current_max)
+            current_max = val;
+        else {
+            diff =
+                std::max(diff, static_cast<std::uint32_t>(current_max - val));
+            total_best = std::max(
+                total_best, diff + best_forward[best_forward.size() - i - 1]);
+        }
+    }
+
+    return total_best;
+}
+
+// maximum gain when buying and selling as often as we want
+std::uint64_t max_difference_infinite(std::vector<std::int32_t> const& values) {
+    // when selling and buying without a limit, we can take all profits there
+    // are
+    std::uint64_t sum = 0;
+    auto sum_positives = [&sum](auto const lhs, auto const rhs) {
+        if (lhs < rhs) sum += rhs - lhs;
+        return false;
+    };
+    std::adjacent_find(values.begin(), values.end(), sum_positives);
+    return sum;
 }
 
 }  // namespace arrays
