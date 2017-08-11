@@ -72,5 +72,6 @@ int main() {
          << endl;
     cout << "Using max_k(3): " << eopi::arrays::max_difference(heights, 3)
          << endl;
+
     return 0;
 }

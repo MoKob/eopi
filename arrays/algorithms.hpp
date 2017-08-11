@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <functional>
 #include <iterator>
+#include <numeric>
 
 namespace eopi {
 namespace arrays {
@@ -194,6 +195,65 @@ std::uint64_t max_difference(std::vector<std::int32_t> const& values,
         }
     }
     return buys_and_sells.back();
+}
+
+// compute the product (without considering overflows) of all entries in values,
+// excluding one entry
+std::int64_t max_product_all_but_one(std::vector<std::int32_t> const& values) {
+    // count negative values
+    auto negatives = std::count_if(values.begin(), values.end(),
+                                   [](auto val) { return val < 0; });
+
+    std::int64_t product = 1;
+
+    // uneven number of negatives
+    if (negatives % 2 == 1) {
+        // we can use all negatives but the smalles one (both for all
+        // negative/not all), after run state will hold the smallest (absolute)
+        // negative value
+        return std::accumulate(
+            values.begin(), values.end(), product,
+            [state = 1](auto product, auto value) mutable {
+                if (value < 0 && (state == 1 || state < value)) {
+                    auto new_product = state * product;
+                    state = value;
+                    return new_product;
+                } else
+                    return product * value;
+
+            });
+    } else {
+        // we will have a negative result, leave out the largest
+        if (negatives == values.size()) {
+            // when done, state will hold the largest (abs) negative values
+            return std::accumulate(
+                values.begin(), values.end(), product,
+                [state = 1](auto product, auto value) mutable {
+                    if (value < 0 && (value < state)) {
+                        auto new_product = state * product;
+                        state = value;
+                        return new_product;
+                    } else
+                        return product * value;
+                });
+
+        } else {
+            // use all negatives, leave out smallest positives, after running
+            // state will hold the smallest positive value
+            return std::accumulate(
+                values.begin(), values.end(), product,
+                [state = -1](auto product, auto value) mutable {
+                    if (value >= 0 && (state == -1 || value < state)) {
+                        auto new_product = std::abs(state) * product;
+                        state = value;
+                        return new_product;
+                    } else
+                        return product * value;
+                });
+        }
+    }
+
+    return 0;
 }
 
 }  // namespace arrays
