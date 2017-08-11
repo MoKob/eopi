@@ -6,6 +6,7 @@
 #include "algorithms.hpp"
 #include "bigint.hpp"
 #include "randoms.hpp"
+#include "primes.hpp"
 
 using namespace std;
 
@@ -87,6 +88,10 @@ int main() {
     print(sequence);
     auto sub_array = eopi::arrays::max_increasing_subarray(sequence);
     cout << "Longest increasing sub-array: " << sub_array.first << " " << sub_array.second << std::endl;
+
+    cout << "Primes until 100:\n";
+    print(eopi::arrays::euler_sieve(100));
+    print(eopi::arrays::euler_sieve(11));
 
     return 0;
 }
