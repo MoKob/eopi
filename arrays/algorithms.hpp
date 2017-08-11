@@ -169,6 +169,33 @@ std::uint64_t max_difference_infinite(std::vector<std::int32_t> const& values) {
     return sum;
 }
 
+// using dynamic programming to compute the best we can reach with num_buys
+// buy-sells in values
+std::uint64_t max_difference(std::vector<std::int32_t> const& values,
+                             std::int32_t const num_buys) {
+    if (2 * num_buys >= values.size()) return max_difference_infinite(values);
+
+    // whats the best we can do when having to do j-1 buy / sell actions with j
+    // happening at i
+    // whats the best we can do when doing j-1 buy/sell transactions and selling
+    // at i
+    const auto state_size = 2 * num_buys + 1;
+    std::vector<std::int64_t> buys_and_sells(
+        state_size, std::numeric_limits<std::int32_t>::min());
+    buys_and_sells[0] = 0;
+
+    std::cout << std::endl;
+    for (std::uint32_t i = 0; i < values.size(); ++i) {
+        auto last_round = buys_and_sells;
+        for (std::int32_t k = 1, sign = -1; k <= i + 1 && k < state_size;
+             ++k, sign *= -1) {
+            std::int64_t diff = sign * values[i] + last_round[k - 1];
+            buys_and_sells[k] = std::max(buys_and_sells[k], diff);
+        }
+    }
+    return buys_and_sells.back();
+}
+
 }  // namespace arrays
 }  // namespace eopi
 
