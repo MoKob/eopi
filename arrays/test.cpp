@@ -73,5 +73,16 @@ int main() {
     cout << "Using max_k(3): " << eopi::arrays::max_difference(heights, 3)
          << endl;
 
+    vector<std::int32_t> zero = {-1,0,-3,0,-4};
+    vector<std::int32_t> negatives_zero = {-1,0,-3,-4,5};
+    cout << "Expecting: 0 -- " << eopi::arrays::max_product_all_but_one(zero) << " " << eopi::arrays::max_product_all_but_one(negatives_zero) << endl;
+
+    vector<std::int32_t> negative = {-1,-2,-3,-4,-5,-6};
+    cout << "Expecting; -120 -- " << eopi::arrays::max_product_all_but_one(negative) << endl;
+
+    vector<std::int32_t> single_zero = {0,1,2,3,4,5};
+    cout << "Expecting; 120 -- " << eopi::arrays::max_product_all_but_one(single_zero) << endl;
+
+
     return 0;
 }
