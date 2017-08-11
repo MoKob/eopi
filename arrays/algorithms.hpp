@@ -256,6 +256,29 @@ std::int64_t max_product_all_but_one(std::vector<std::int32_t> const& values) {
     return 0;
 }
 
+std::pair<std::uint32_t, std::uint32_t> max_increasing_subarray(
+    std::vector<std::int32_t> const& values) {
+    auto best = std::make_pair(0u, 0u);
+
+    std::uint32_t start, current;
+
+    auto const update = [&]() {
+        auto new_pair = std::make_pair(start, current);
+        start = current;
+        if (best.second - best.first < new_pair.second - new_pair.first)
+            best = new_pair;
+    };
+
+    for (start = 0, current = 1; current < values.size(); ++current) {
+        // end of a sequence
+        if (values[current] < values[current - 1]) update();
+    }
+
+    update();
+
+    return best;
+}
+
 }  // namespace arrays
 }  // namespace eopi
 

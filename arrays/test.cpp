@@ -83,6 +83,10 @@ int main() {
     vector<std::int32_t> single_zero = {0,1,2,3,4,5};
     cout << "Expecting; 120 -- " << eopi::arrays::max_product_all_but_one(single_zero) << endl;
 
+    vector<std::int32_t> sequence = {0,1,2,1,2,3,0,4,2,3,4,5,6};
+    print(sequence);
+    auto sub_array = eopi::arrays::max_increasing_subarray(sequence);
+    cout << "Longest increasing sub-array: " << sub_array.first << " " << sub_array.second << std::endl;
 
     return 0;
 }
