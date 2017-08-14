@@ -93,5 +93,14 @@ int main() {
     print(eopi::arrays::euler_sieve(100));
     print(eopi::arrays::euler_sieve(11));
 
+    vector<int32_t> permuted = {0,1,2,3,4,5,6,7,8,9};
+    vector<int32_t> permuter = {1,2,4,7,6,5,0,3,9,8};
+
+    cout << "Applying to X, permutation Y, to result Z:\n";
+    print(permuted);
+    print(permuter);
+    permuted = eopi::arrays::apply_permutation(std::move(permuted),permuter);
+    print(permuted);
+
     return 0;
 }

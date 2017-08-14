@@ -279,6 +279,37 @@ std::pair<std::uint32_t, std::uint32_t> max_increasing_subarray(
     return best;
 }
 
+// permute up to 2^31 entries, implicitly borrowing a sign bit
+std::vector<std::int32_t> apply_permutation(
+    std::vector<std::int32_t> input_output,
+    std::vector<std::int32_t> & permutation) {
+
+    // permute one entire circle
+    auto const permute_circle = [&](auto const start)
+    {
+        auto pos = permutation[start];
+        auto tmp = input_output[start];
+        while( pos != start )
+        {
+            std::swap(tmp,input_output[pos]);
+            auto tmp_pos = pos;
+            pos = permutation[pos];
+            permutation[tmp_pos] = -permutation[tmp_pos];
+        }
+        input_output[start] = tmp;
+    };
+
+    for( std::uint32_t start = 0; start < input_output.size(); ++start )
+    {
+        if( permutation[start] > 0)
+            permute_circle(start);
+        else
+            permutation[start] = -permutation[start];
+    }
+
+    return input_output;
+}
+
 }  // namespace arrays
 }  // namespace eopi
 
