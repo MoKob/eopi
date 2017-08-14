@@ -107,5 +107,13 @@ int main() {
     cout << "Rotating by 5:\n";
     rotated = eopi::arrays::rotate(std::move(rotated),5);
     print(rotated);
+
+    vector<int32_t> permutation = {0,1,2};
+    cout << "Permutations of [0,1,2]" << endl;
+    for( uint32_t i = 0; i < 6; ++i )
+    {
+        print(permutation);
+        eopi::arrays::next_permutation(permutation.begin(),permutation.end());
+    }
     return 0;
 }

@@ -81,7 +81,7 @@ iterator_type unique(iterator_type const begin, iterator_type const end) {
 
 // find the smallest positive integer missing in data. Destroys the content of
 // data
-std::int32_t smallest_missing_positive(std::vector<std::int32_t>& data) {
+inline std::int32_t smallest_missing_positive(std::vector<std::int32_t>& data) {
     for (std::size_t i = 0; i < data.size();) {
         if (data[i] != i && data[i] < data.size() && data[i] >= 0) {
             std::swap(data[i], data[data[i]]);
@@ -97,7 +97,7 @@ std::int32_t smallest_missing_positive(std::vector<std::int32_t>& data) {
     return -1;
 }
 
-std::uint32_t max_difference(std::vector<std::int32_t> const& values) {
+inline std::uint32_t max_difference(std::vector<std::int32_t> const& values) {
     // find the minimum b such that a little robot with capacity `b` in batter,
     // perfect recuperation and potential energy == capacity can traverse the
     // entire sequence
@@ -120,7 +120,8 @@ std::uint32_t max_difference(std::vector<std::int32_t> const& values) {
 
 // find i < j < k < l such that values[j]-values[i] + values[k] - values[l]
 // maximal over all i,j,k,l
-std::uint64_t max_difference_twice(std::vector<std::int32_t> const& values) {
+inline std::uint64_t max_difference_twice(
+    std::vector<std::int32_t> const& values) {
     if (values.empty()) return 0;
 
     // use additional storage to memorize max difference values for all v[j]
@@ -160,7 +161,8 @@ std::uint64_t max_difference_twice(std::vector<std::int32_t> const& values) {
 }
 
 // maximum gain when buying and selling as often as we want
-std::uint64_t max_difference_infinite(std::vector<std::int32_t> const& values) {
+inline std::uint64_t max_difference_infinite(
+    std::vector<std::int32_t> const& values) {
     // when selling and buying without a limit, we can take all profits there
     // are
     std::uint64_t sum = 0;
@@ -174,8 +176,8 @@ std::uint64_t max_difference_infinite(std::vector<std::int32_t> const& values) {
 
 // using dynamic programming to compute the best we can reach with num_buys
 // buy-sells in values
-std::uint64_t max_difference(std::vector<std::int32_t> const& values,
-                             std::int32_t const num_buys) {
+inline std::uint64_t max_difference(std::vector<std::int32_t> const& values,
+                                    std::int32_t const num_buys) {
     if (2 * num_buys >= values.size()) return max_difference_infinite(values);
 
     // whats the best we can do when having to do j-1 buy / sell actions with j
@@ -201,7 +203,8 @@ std::uint64_t max_difference(std::vector<std::int32_t> const& values,
 
 // compute the product (without considering overflows) of all entries in values,
 // excluding one entry
-std::int64_t max_product_all_but_one(std::vector<std::int32_t> const& values) {
+inline std::int64_t max_product_all_but_one(
+    std::vector<std::int32_t> const& values) {
     // count negative values
     auto negatives = std::count_if(values.begin(), values.end(),
                                    [](auto val) { return val < 0; });
@@ -258,7 +261,7 @@ std::int64_t max_product_all_but_one(std::vector<std::int32_t> const& values) {
     return 0;
 }
 
-std::pair<std::uint32_t, std::uint32_t> max_increasing_subarray(
+inline std::pair<std::uint32_t, std::uint32_t> max_increasing_subarray(
     std::vector<std::int32_t> const& values) {
     auto best = std::make_pair(0u, 0u);
 
@@ -282,7 +285,7 @@ std::pair<std::uint32_t, std::uint32_t> max_increasing_subarray(
 }
 
 // permute up to 2^31 entries, implicitly borrowing a sign bit
-std::vector<std::int32_t> apply_permutation(
+inline std::vector<std::int32_t> apply_permutation(
     std::vector<std::int32_t> input_output,
     std::vector<std::int32_t>& permutation) {
     // permute one entire circle
@@ -308,9 +311,35 @@ std::vector<std::int32_t> apply_permutation(
     return input_output;
 }
 
+template <typename iterator_type>
+void next_permutation(iterator_type const begin, iterator_type const end) {
+    if (begin == end) return;
+
+    // find longest decreasing suffic
+    auto const longest_suffix = [&]() {
+        for (auto itr = end - 1; itr != begin; --itr) {
+            if (*(itr - 1) < *itr) return itr;
+        }
+        return begin;
+    }();
+
+    // if the sequence is completely decreasing, we can reverse to sorted again
+    if (longest_suffix != begin) {
+        // find the smallest element larger than (longest_suffix-1)
+        auto swap_itr =
+            std::find_if(longest_suffix, end,
+                         [ref = *(longest_suffix - 1)](auto const value) {
+                             return value < ref;
+                         }) -
+            1;
+        std::swap(*swap_itr, *(longest_suffix - 1));
+    }
+    std::reverse(longest_suffix, end);
+}
+
 // rotate an array by rotation entries
-std::vector<std::int32_t> rotate(std::vector<std::int32_t> data,
-                                 std::uint32_t rotation) {
+inline std::vector<std::int32_t> rotate(std::vector<std::int32_t> data,
+                                        std::uint32_t rotation) {
     // compute the cyclic interdependency between the data size and the rotation
     auto const gcd = primitives::gcd(data.size(), rotation);
 
