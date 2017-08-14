@@ -6,6 +6,8 @@
 #include <iterator>
 #include <numeric>
 
+#include "../primitives/math.hpp"
+
 namespace eopi {
 namespace arrays {
 
@@ -282,16 +284,13 @@ std::pair<std::uint32_t, std::uint32_t> max_increasing_subarray(
 // permute up to 2^31 entries, implicitly borrowing a sign bit
 std::vector<std::int32_t> apply_permutation(
     std::vector<std::int32_t> input_output,
-    std::vector<std::int32_t> & permutation) {
-
+    std::vector<std::int32_t>& permutation) {
     // permute one entire circle
-    auto const permute_circle = [&](auto const start)
-    {
+    auto const permute_circle = [&](auto const start) {
         auto pos = permutation[start];
         auto tmp = input_output[start];
-        while( pos != start )
-        {
-            std::swap(tmp,input_output[pos]);
+        while (pos != start) {
+            std::swap(tmp, input_output[pos]);
             auto tmp_pos = pos;
             pos = permutation[pos];
             permutation[tmp_pos] = -permutation[tmp_pos];
@@ -299,15 +298,36 @@ std::vector<std::int32_t> apply_permutation(
         input_output[start] = tmp;
     };
 
-    for( std::uint32_t start = 0; start < input_output.size(); ++start )
-    {
-        if( permutation[start] > 0)
+    for (std::uint32_t start = 0; start < input_output.size(); ++start) {
+        if (permutation[start] > 0)
             permute_circle(start);
         else
             permutation[start] = -permutation[start];
     }
 
     return input_output;
+}
+
+// rotate an array by rotation entries
+std::vector<std::int32_t> rotate(std::vector<std::int32_t> data,
+                                 std::uint32_t rotation) {
+    // compute the cyclic interdependency between the data size and the rotation
+    auto const gcd = primitives::gcd(data.size(), rotation);
+
+    auto const apply_cyclic_permutation = [&](std::uint32_t const start,
+                                              std::uint32_t cycle_length) {
+        std::int32_t tmp = data[start];
+        auto pos = (start + rotation) % data.size();
+        for (std::uint32_t swap = 0; swap < cycle_length;
+             ++swap, pos = (pos + rotation) % data.size())
+            std::swap(data[pos], tmp);
+    };
+
+    // apply in-place permutations for all elements less than the gcd
+    for (std::uint32_t start = 0; start < gcd; ++start)
+        apply_cyclic_permutation(start, data.size() / gcd);
+
+    return data;
 }
 
 }  // namespace arrays

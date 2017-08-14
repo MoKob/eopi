@@ -130,6 +130,7 @@ inline std::uint64_t rng_coin(std::uint64_t from, std::uint64_t to) {
 }
 
 // computing the greatest common divisor using euclids algorithms
+// TODO do this without using division/mod
 std::uint64_t gcd(std::uint64_t a, std::uint64_t b) {
     while (true) {
         // basic assumption, a needs to be larger

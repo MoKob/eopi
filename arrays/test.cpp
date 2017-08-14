@@ -102,5 +102,10 @@ int main() {
     permuted = eopi::arrays::apply_permutation(std::move(permuted),permuter);
     print(permuted);
 
+    vector<int32_t> rotated = {0,1,2,3,4,5,6,7,8,9};
+    print(rotated);
+    cout << "Rotating by 5:\n";
+    rotated = eopi::arrays::rotate(std::move(rotated),5);
+    print(rotated);
     return 0;
 }
