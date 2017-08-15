@@ -133,5 +133,8 @@ int main() {
     eopi::arrays::rotate(to_spiral);
     for (uint32_t i = 0; i < 4; ++i) print(to_spiral[i]);
 
+    cout << "Pascal:" << endl;
+    eopi::arrays::print_pascal(8);
+
     return 0;
 }

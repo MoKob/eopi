@@ -5,6 +5,7 @@
 #include <functional>
 #include <iterator>
 #include <numeric>
+#include <iostream>
 
 #include "../primitives/math.hpp"
 
@@ -400,6 +401,25 @@ inline void rotate(std::vector<std::vector<std::int32_t>>& data) {
         for (std::uint32_t x = 0; x < data.size() / 2; ++x) {
             cyclic_swap(y, x);
         }
+    }
+}
+
+// print the first n lines of pascals triangle, using O(n) storage, O(n^2) time (output size)
+inline void print_pascal(std::int32_t n)
+{
+    std::vector<std::uint64_t> pascal(n,1);
+    for( std::size_t i = 0; i < n; ++i )
+    {
+        std::cout << pascal[0];
+        auto tmp = pascal[0];
+        for( std::size_t j = 1; j <= i; ++j )
+        {
+            std::cout << " " << pascal[j];
+            auto tmp_2 = pascal[j];
+            pascal[j] = pascal[j] + tmp;
+            tmp = tmp_2;
+        }
+        std::cout << std::endl;
     }
 }
 
