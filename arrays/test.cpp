@@ -116,5 +116,12 @@ int main() {
         print(permutation);
         eopi::arrays::next_permutation(permutation.begin(),permutation.end());
     }
+
+    vector<vector<int32_t>> to_spiral = { {0,1,2},{3,4,5},{6,7,8} };
+    for( uint32_t i = 0; i < 3; ++i )
+        print(to_spiral[i]);
+
+    cout << "Spiral ordering" << endl;
+    print( eopi::arrays::spiral(to_spiral));
     return 0;
 }

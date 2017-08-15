@@ -359,6 +359,34 @@ inline std::vector<std::int32_t> rotate(std::vector<std::int32_t> data,
     return data;
 }
 
+inline std::vector<std::int32_t> spiral(std::vector<std::vector<std::int32_t>> const& data)
+{
+    std::int32_t dx = 1, dy = 0;
+    std::int32_t x = 0, y = 0;
+    std::uint32_t next_swap = data.size();
+
+    std::vector<std::int32_t> result;
+    result.reserve(data.size()*data.size());
+    while( next_swap )
+    {
+        for( std::size_t i = 0; i+1 < next_swap; ++i, x += dx, y += dy )
+        {
+            result.push_back(data[y][x]);
+        }
+        // correct for the final addition
+        result.push_back(data[y][x]);
+
+        // create next starting situation
+        next_swap -= std::abs(dx);
+        auto tmp = dy;
+        dy = dx;
+        dx = -tmp;
+        x += dx;
+        y += dy;
+    }
+    return result;
+}
+
 }  // namespace arrays
 }  // namespace eopi
 
