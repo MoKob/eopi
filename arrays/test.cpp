@@ -5,8 +5,8 @@
 
 #include "algorithms.hpp"
 #include "bigint.hpp"
-#include "randoms.hpp"
 #include "primes.hpp"
+#include "randoms.hpp"
 #include "sudoku.hpp"
 
 using namespace std;
@@ -75,53 +75,63 @@ int main() {
     cout << "Using max_k(3): " << eopi::arrays::max_difference(heights, 3)
          << endl;
 
-    vector<std::int32_t> zero = {-1,0,-3,0,-4};
-    vector<std::int32_t> negatives_zero = {-1,0,-3,-4,5};
-    cout << "Expecting: 0 -- " << eopi::arrays::max_product_all_but_one(zero) << " " << eopi::arrays::max_product_all_but_one(negatives_zero) << endl;
+    vector<std::int32_t> zero = {-1, 0, -3, 0, -4};
+    vector<std::int32_t> negatives_zero = {-1, 0, -3, -4, 5};
+    cout << "Expecting: 0 -- " << eopi::arrays::max_product_all_but_one(zero)
+         << " " << eopi::arrays::max_product_all_but_one(negatives_zero)
+         << endl;
 
-    vector<std::int32_t> negative = {-1,-2,-3,-4,-5,-6};
-    cout << "Expecting; -120 -- " << eopi::arrays::max_product_all_but_one(negative) << endl;
+    vector<std::int32_t> negative = {-1, -2, -3, -4, -5, -6};
+    cout << "Expecting; -120 -- "
+         << eopi::arrays::max_product_all_but_one(negative) << endl;
 
-    vector<std::int32_t> single_zero = {0,1,2,3,4,5};
-    cout << "Expecting; 120 -- " << eopi::arrays::max_product_all_but_one(single_zero) << endl;
+    vector<std::int32_t> single_zero = {0, 1, 2, 3, 4, 5};
+    cout << "Expecting; 120 -- "
+         << eopi::arrays::max_product_all_but_one(single_zero) << endl;
 
-    vector<std::int32_t> sequence = {0,1,2,1,2,3,0,4,2,3,4,5,6};
+    vector<std::int32_t> sequence = {0, 1, 2, 1, 2, 3, 0, 4, 2, 3, 4, 5, 6};
     print(sequence);
     auto sub_array = eopi::arrays::max_increasing_subarray(sequence);
-    cout << "Longest increasing sub-array: " << sub_array.first << " " << sub_array.second << std::endl;
+    cout << "Longest increasing sub-array: " << sub_array.first << " "
+         << sub_array.second << std::endl;
 
     cout << "Primes until 100:\n";
     print(eopi::arrays::euler_sieve(100));
     print(eopi::arrays::euler_sieve(11));
 
-    vector<int32_t> permuted = {0,1,2,3,4,5,6,7,8,9};
-    vector<int32_t> permuter = {1,2,4,7,6,5,0,3,9,8};
+    vector<int32_t> permuted = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    vector<int32_t> permuter = {1, 2, 4, 7, 6, 5, 0, 3, 9, 8};
 
     cout << "Applying to X, permutation Y, to result Z:\n";
     print(permuted);
     print(permuter);
-    permuted = eopi::arrays::apply_permutation(std::move(permuted),permuter);
+    permuted = eopi::arrays::apply_permutation(std::move(permuted), permuter);
     print(permuted);
 
-    vector<int32_t> rotated = {0,1,2,3,4,5,6,7,8,9};
+    vector<int32_t> rotated = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     print(rotated);
     cout << "Rotating by 5:\n";
-    rotated = eopi::arrays::rotate(std::move(rotated),5);
+    rotated = eopi::arrays::rotate(std::move(rotated), 5);
     print(rotated);
 
-    vector<int32_t> permutation = {0,1,2};
+    vector<int32_t> permutation = {0, 1, 2};
     cout << "Permutations of [0,1,2]" << endl;
-    for( uint32_t i = 0; i < 6; ++i )
-    {
+    for (uint32_t i = 0; i < 6; ++i) {
         print(permutation);
-        eopi::arrays::next_permutation(permutation.begin(),permutation.end());
+        eopi::arrays::next_permutation(permutation.begin(), permutation.end());
     }
 
-    vector<vector<int32_t>> to_spiral = { {0,1,2},{3,4,5},{6,7,8} };
-    for( uint32_t i = 0; i < 3; ++i )
-        print(to_spiral[i]);
+    vector<vector<int32_t>> to_spiral = {
+        {0, 1, 2, 3}, {4, 5, 6, 7}, {8, 9, 10, 11}, {12, 13, 14, 15}};
+    cout << "Input for spiral + rotate:" << endl;
+    for (uint32_t i = 0; i < 4; ++i) print(to_spiral[i]);
 
     cout << "Spiral ordering" << endl;
-    print( eopi::arrays::spiral(to_spiral));
+    print(eopi::arrays::spiral(to_spiral));
+
+    cout << "Rotated" << endl;
+    eopi::arrays::rotate(to_spiral);
+    for (uint32_t i = 0; i < 4; ++i) print(to_spiral[i]);
+
     return 0;
 }

@@ -359,18 +359,16 @@ inline std::vector<std::int32_t> rotate(std::vector<std::int32_t> data,
     return data;
 }
 
-inline std::vector<std::int32_t> spiral(std::vector<std::vector<std::int32_t>> const& data)
-{
+inline std::vector<std::int32_t> spiral(
+    std::vector<std::vector<std::int32_t>> const& data) {
     std::int32_t dx = 1, dy = 0;
     std::int32_t x = 0, y = 0;
     std::uint32_t next_swap = data.size();
 
     std::vector<std::int32_t> result;
-    result.reserve(data.size()*data.size());
-    while( next_swap )
-    {
-        for( std::size_t i = 0; i+1 < next_swap; ++i, x += dx, y += dy )
-        {
+    result.reserve(data.size() * data.size());
+    while (next_swap) {
+        for (std::size_t i = 0; i + 1 < next_swap; ++i, x += dx, y += dy) {
             result.push_back(data[y][x]);
         }
         // correct for the final addition
@@ -385,6 +383,24 @@ inline std::vector<std::int32_t> spiral(std::vector<std::vector<std::int32_t>> c
         y += dy;
     }
     return result;
+}
+
+// rotate an array (quadratic, size == 2^n) by 90 degrees
+inline void rotate(std::vector<std::vector<std::int32_t>>& data) {
+    auto const cyclic_swap = [&](auto y, auto x)
+    {
+        auto tmp = data[y][x];
+        data[y][x] = data[data.size()-1-x][y];
+        data[data.size()-1-x][y] = data[data.size()-1-x][data.size()-1-y];
+        data[data.size()-1-x][data.size()-1-y] = data[x][data.size()-1-y];
+        data[x][data.size()-1-y] = tmp;
+    };
+
+    for (std::uint32_t y = 0; y < data.size() / 2; ++y) {
+        for (std::uint32_t x = 0; x < data.size() / 2; ++x) {
+            cyclic_swap(y, x);
+        }
+    }
 }
 
 }  // namespace arrays
