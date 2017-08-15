@@ -7,6 +7,7 @@
 #include "bigint.hpp"
 #include "randoms.hpp"
 #include "primes.hpp"
+#include "sudoku.hpp"
 
 using namespace std;
 
