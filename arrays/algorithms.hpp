@@ -2,10 +2,12 @@
 #define EOPI_ARRAYS_ALGORITHMS_HPP_
 
 #include <algorithm>
+#include <cstddef>
+#include <cstdint>
 #include <functional>
+#include <iostream>
 #include <iterator>
 #include <numeric>
-#include <iostream>
 
 #include "../primitives/math.hpp"
 
@@ -388,13 +390,14 @@ inline std::vector<std::int32_t> spiral(
 
 // rotate an array (quadratic, size == 2^n) by 90 degrees
 inline void rotate(std::vector<std::vector<std::int32_t>>& data) {
-    auto const cyclic_swap = [&](auto y, auto x)
-    {
+    auto const cyclic_swap = [&](auto y, auto x) {
         auto tmp = data[y][x];
-        data[y][x] = data[data.size()-1-x][y];
-        data[data.size()-1-x][y] = data[data.size()-1-x][data.size()-1-y];
-        data[data.size()-1-x][data.size()-1-y] = data[x][data.size()-1-y];
-        data[x][data.size()-1-y] = tmp;
+        data[y][x] = data[data.size() - 1 - x][y];
+        data[data.size() - 1 - x][y] =
+            data[data.size() - 1 - x][data.size() - 1 - y];
+        data[data.size() - 1 - x][data.size() - 1 - y] =
+            data[x][data.size() - 1 - y];
+        data[x][data.size() - 1 - y] = tmp;
     };
 
     for (std::uint32_t y = 0; y < data.size() / 2; ++y) {
@@ -404,16 +407,14 @@ inline void rotate(std::vector<std::vector<std::int32_t>>& data) {
     }
 }
 
-// print the first n lines of pascals triangle, using O(n) storage, O(n^2) time (output size)
-inline void print_pascal(std::int32_t n)
-{
-    std::vector<std::uint64_t> pascal(n,1);
-    for( std::size_t i = 0; i < n; ++i )
-    {
+// print the first n lines of pascals triangle, using O(n) storage, O(n^2) time
+// (output size)
+inline void print_pascal(std::int32_t n) {
+    std::vector<std::uint64_t> pascal(n, 1);
+    for (std::size_t i = 0; i < n; ++i) {
         std::cout << pascal[0];
         auto tmp = pascal[0];
-        for( std::size_t j = 1; j <= i; ++j )
-        {
+        for (std::size_t j = 1; j <= i; ++j) {
             std::cout << " " << pascal[j];
             auto tmp_2 = pascal[j];
             pascal[j] = pascal[j] + tmp;
@@ -421,6 +422,41 @@ inline void print_pascal(std::int32_t n)
         }
         std::cout << std::endl;
     }
+}
+
+inline void rooks(std::vector<std::vector<bool>>& field) {
+    std::vector<bool> rook_row(field.size(), false);
+    std::vector<bool> rook_col(field.size(), false);
+    for (std::size_t y = 0; y < field.size(); ++y) {
+        for (std::size_t x = 0; x < field.size(); ++x) {
+            rook_row[y] = rook_row[y] || field[y][x];
+            rook_col[x] = rook_col[x] || field[y][x];
+            field[y][x] = false;
+        }
+    }
+    for (std::size_t y = 0; y < field.size(); ++y) {
+        for (std::size_t x = 0; x < field.size(); ++x) {
+            field[y][x] = field[y][x] || rook_row[y];
+            field[y][x] = field[y][x] || rook_col[x];
+        }
+    }
+}
+
+// find the only row that is completely set to `false` (except for [i][i]
+// possibly)
+inline std::uint32_t celebrity(std::vector<std::vector<bool>> const& knows) {
+    std::uint32_t j = 1, i = 0;
+    for (; j < knows.size();) {
+        if (knows[i][j]) {
+            // i cannot be a celebrity, since i doesn't know anyone up to j, all
+            // prior to j cannot be the celebrity
+            i = j++;
+        } else {
+            // i remains a candidate, j not
+            j++;
+        }
+    }
+    return i;
 }
 
 }  // namespace arrays
