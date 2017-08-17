@@ -1,6 +1,7 @@
 #ifndef EOPI_STRINGS_HPP_
 #define EOPI_STRINGS_HPP_
 
+#include <algorithm>
 #include <string>
 
 namespace eopi {
@@ -31,6 +32,21 @@ bool is_palindrom(std::string const& str) {
     for (std::size_t i = 0; 2 * i < str.size(); ++i, ++itr, ++ritr)
         if (*itr != *ritr) return false;
     return true;
+}
+
+std::string reverse_words(std::string sentence)
+{
+    std::reverse(sentence.begin(), sentence.end());
+
+    auto itr = sentence.begin();
+    auto end = sentence.begin();
+    while( end != sentence.end())
+    {
+        end = std::find(itr,sentence.end(),' ');
+        std::reverse(itr,end);
+        itr = end == sentence.end() ? end : end+1;
+    }
+    return sentence;
 }
 
 }  // namespace strings
