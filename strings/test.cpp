@@ -16,5 +16,8 @@ int main() {
     cout << "Reverse sentences: \""
          << eopi::strings::reverse_words("This is a senctence")
          << "\" Word: " << eopi::strings::reverse_words("Word") << endl;
+
+    cout << "Phone Mnemonics: 1234" << endl;
+    eopi::strings::print_mnemonics(123);
     return 0;
 }
