@@ -31,5 +31,10 @@ int main() {
     std::cout << eopi::strings::look_and_say(5) << std::endl;
     std::cout << eopi::strings::look_and_say(6) << std::endl;
     std::cout << eopi::strings::look_and_say(7) << std::endl;
+
+    std::cout << "Romans\n";
+    std::cout << "\tIV:" << eopi::strings::from_roman("IV") << std::endl;
+    std::cout << "\tXXXIV:" << eopi::strings::from_roman("XXXIV") << std::endl;
+    std::cout << "\tCLIX:" << eopi::strings::from_roman("CLIX") << std::endl;
     return 0;
 }
