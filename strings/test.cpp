@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
+
 #include "algorithm.hpp"
+#include "random.hpp"
 
 using namespace std;
 
@@ -18,6 +20,16 @@ int main() {
          << "\" Word: " << eopi::strings::reverse_words("Word") << endl;
 
     cout << "Phone Mnemonics: 1234" << endl;
+
     eopi::strings::print_mnemonics(123);
+
+    std::cout << "Look and say:\n" << std::endl;
+    std::cout << eopi::strings::look_and_say(1) << std::endl;
+    std::cout << eopi::strings::look_and_say(2) << std::endl;
+    std::cout << eopi::strings::look_and_say(3) << std::endl;
+    std::cout << eopi::strings::look_and_say(4) << std::endl;
+    std::cout << eopi::strings::look_and_say(5) << std::endl;
+    std::cout << eopi::strings::look_and_say(6) << std::endl;
+    std::cout << eopi::strings::look_and_say(7) << std::endl;
     return 0;
 }
