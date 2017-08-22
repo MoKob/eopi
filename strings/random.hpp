@@ -70,7 +70,7 @@ inline std::uint32_t from_roman(std::string const numerals) {
 }
 
 inline void ip_helper(std::uint32_t to_place, std::uint32_t pos,
-                      std::string const &str, int placements[3]) {
+                      std::string const& str, int placements[3]) {
     // can use at least three digits per dot
     if ((str.length() - pos) > 3 * (to_place + 1)) return;
 
@@ -79,30 +79,44 @@ inline void ip_helper(std::uint32_t to_place, std::uint32_t pos,
         if (std::stoi(str.substr(pos)) < 256) {
             std::cout << str.substr(0, placements[0]) << '.';
             std::cout << str.substr(placements[0],
-                                       placements[1] - placements[0])
+                                    placements[1] - placements[0])
                       << '.';
             std::cout << str.substr(placements[1],
-                                       placements[2] - placements[1])
+                                    placements[2] - placements[1])
                       << '.';
-            std::cout << str.substr(placements[2],
-                                       str.size() - placements[2])
+            std::cout << str.substr(placements[2], str.size() - placements[2])
                       << std::endl;
         }
         return;
     }
 
     // backtrack
-    for( int i = 1; i < 4 && pos + i < str.length(); ++i)
-    {
-        placements[3-to_place] = pos + i;
-        if( std::stoi(str.substr(pos,i)) < 256)
-            ip_helper(to_place - 1, i+pos, str, placements);
+    for (int i = 1; i < 4 && pos + i < str.length(); ++i) {
+        placements[3 - to_place] = pos + i;
+        if (std::stoi(str.substr(pos, i)) < 256)
+            ip_helper(to_place - 1, i + pos, str, placements);
     }
 }
 
 inline void all_valid_ips(std::string const ip) {
     int placements[3];
-    ip_helper(3,0,ip,placements);
+    ip_helper(3, 0, ip, placements);
+}
+
+std::string snakestring(std::string const& str) {
+    std::string result;
+    result.resize(3 * str.length() + 2);
+    std::fill(result.begin(),result.end(),' ');
+    result[str.length()] = result[2 * str.length()] = '\n';
+    for (std::int32_t i = 0; i < str.length(); ++i) {
+        if (i % 2 == 0)
+            result[str.length() + 1 + i] = str[i];
+        else if (i % 4 == 1)
+            result[i] = str[i];
+        else
+            result[2 * str.length() + 1 + i] = str[i];
+    }
+    return result;
 }
 
 }  // namespace strings

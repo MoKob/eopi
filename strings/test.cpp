@@ -10,10 +10,10 @@ int main() {
     cout << "aba"
          << " is " << eopi::strings::is_palindrom("aba") << " palindromic?"
          << endl;
-    std::string replace_and_result("abba");
+    string replace_and_result("abba");
     cout << "Replace and remove: " << replace_and_result << " ";
     eopi::strings::remove_and_replace(4, replace_and_result);
-    cout << replace_and_result << std::endl;
+    cout << replace_and_result << endl;
 
     cout << "Reverse sentences: \""
          << eopi::strings::reverse_words("This is a senctence")
@@ -23,21 +23,24 @@ int main() {
 
     eopi::strings::print_mnemonics(123);
 
-    std::cout << "Look and say:\n" << std::endl;
-    std::cout << eopi::strings::look_and_say(1) << std::endl;
-    std::cout << eopi::strings::look_and_say(2) << std::endl;
-    std::cout << eopi::strings::look_and_say(3) << std::endl;
-    std::cout << eopi::strings::look_and_say(4) << std::endl;
-    std::cout << eopi::strings::look_and_say(5) << std::endl;
-    std::cout << eopi::strings::look_and_say(6) << std::endl;
-    std::cout << eopi::strings::look_and_say(7) << std::endl;
+    cout << "Look and say:\n" << endl;
+    cout << eopi::strings::look_and_say(1) << endl;
+    cout << eopi::strings::look_and_say(2) << endl;
+    cout << eopi::strings::look_and_say(3) << endl;
+    cout << eopi::strings::look_and_say(4) << endl;
+    cout << eopi::strings::look_and_say(5) << endl;
+    cout << eopi::strings::look_and_say(6) << endl;
+    cout << eopi::strings::look_and_say(7) << endl;
 
-    std::cout << "Romans\n";
-    std::cout << "\tIV:" << eopi::strings::from_roman("IV") << std::endl;
-    std::cout << "\tXXXIV:" << eopi::strings::from_roman("XXXIV") << std::endl;
-    std::cout << "\tCLIX:" << eopi::strings::from_roman("CLIX") << std::endl;
+    cout << "Romans\n";
+    cout << "\tIV:" << eopi::strings::from_roman("IV") << endl;
+    cout << "\tXXXIV:" << eopi::strings::from_roman("XXXIV") << endl;
+    cout << "\tCLIX:" << eopi::strings::from_roman("CLIX") << endl;
 
-    std::cout << "All Ips for 19216811\n";
+    cout << "All Ips for 19216811\n";
     eopi::strings::all_valid_ips("19216811");
+
+    cout << "Snakestring of \"Hello World!\n";
+    cout << eopi::strings::snakestring("Hello World!") << endl;
     return 0;
 }
