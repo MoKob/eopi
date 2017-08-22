@@ -42,5 +42,10 @@ int main() {
 
     cout << "Snakestring of \"Hello World!\n";
     cout << eopi::strings::snakestring("Hello World!") << endl;
+
+    cout << "RLE of: " << "aaabbcCCCddddd" << endl;
+    auto const encoding = eopi::strings::runlength::encode("aaabbcCCCddddd");
+    cout << encoding << endl;
+    cout << "Decoded: " << eopi::strings::runlength::decode(encoding) << endl;
     return 0;
 }

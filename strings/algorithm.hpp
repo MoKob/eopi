@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cmath>
 #include <string>
+#include <sstream>
 
 namespace eopi {
 namespace strings {
@@ -86,6 +87,37 @@ void print_mnemonics(std::uint32_t digits) {
     print_mnemonics_helper(length, digits, "");
 }
 
+// runlength encoding/decoding for non-digit strings (no error checking, requires valid input)
+namespace runlength
+{
+    std::string encode(std::string const& str)
+    {
+        std::ostringstream oss;
+        auto itr = str.begin();
+        while( itr != str.end() )
+        {
+            auto end = std::find_if_not(itr,str.end(),[itr](char const c){ return c == *itr; });
+            oss << std::distance(itr,end) << *itr;
+            itr = end;
+        }
+        return oss.str();
+    }
+
+    std::string decode(std::string const& str)
+    {
+        std::istringstream iss(str);
+        std::ostringstream oss;
+        std::uint32_t count;
+        while( iss >> count )
+        {
+            char c;
+            iss >> c;
+            while(count--)
+                oss << c;
+        }
+        return oss.str();
+    }
+} // namespace runlength
 
 }  // namespace strings
 }  // namespace eopi
