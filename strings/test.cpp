@@ -36,5 +36,8 @@ int main() {
     std::cout << "\tIV:" << eopi::strings::from_roman("IV") << std::endl;
     std::cout << "\tXXXIV:" << eopi::strings::from_roman("XXXIV") << std::endl;
     std::cout << "\tCLIX:" << eopi::strings::from_roman("CLIX") << std::endl;
+
+    std::cout << "All Ips for 19216811\n";
+    eopi::strings::all_valid_ips("19216811");
     return 0;
 }
