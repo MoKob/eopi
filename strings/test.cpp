@@ -47,5 +47,14 @@ int main() {
     auto const encoding = eopi::strings::runlength::encode("aaabbcCCCddddd");
     cout << encoding << endl;
     cout << "Decoded: " << eopi::strings::runlength::decode(encoding) << endl;
+
+    std::vector<std::uint32_t> egd = {13,13};
+    auto const encoded = eopi::strings::elias_gamma_code::encode(egd);
+    std::cout << "Egc: " << encoded << std::endl;
+    auto const decoded = eopi::strings::elias_gamma_code::decode(encoded);
+    std::cout << "Decoded:";
+    for( auto v : decoded )
+        std::cout << " " << v;
+    std::cout << std::endl;
     return 0;
 }

@@ -5,11 +5,13 @@
 #include <cmath>
 #include <string>
 #include <sstream>
+#include <vector>
+#include <bitset>
 
 namespace eopi {
 namespace strings {
 
-void remove_and_replace(std::size_t input_size, std::string& result) {
+inline void remove_and_replace(std::size_t input_size, std::string& result) {
     // remove 'b's
     std::size_t output_pos = 0;
     for (std::size_t i = 0; i < input_size; ++i) {
@@ -28,7 +30,7 @@ void remove_and_replace(std::size_t input_size, std::string& result) {
 }
 
 // check whether a given string is a palindrome
-bool is_palindrom(std::string const& str) {
+inline bool is_palindrom(std::string const& str) {
     auto itr = str.begin();
     auto ritr = str.rbegin();
     for (std::size_t i = 0; 2 * i < str.size(); ++i, ++itr, ++ritr)
@@ -36,7 +38,7 @@ bool is_palindrom(std::string const& str) {
     return true;
 }
 
-std::string reverse_words(std::string sentence) {
+inline std::string reverse_words(std::string sentence) {
     std::reverse(sentence.begin(), sentence.end());
 
     auto itr = sentence.begin();
@@ -49,7 +51,7 @@ std::string reverse_words(std::string sentence) {
     return sentence;
 }
 
-void print_mnemonics_helper(std::uint32_t length, std::uint32_t digits,
+inline void print_mnemonics_helper(std::uint32_t length, std::uint32_t digits,
                             std::string mnemonic) {
     const static constexpr char chars[][10] = {{},
                                          {'a', 'b', 'c'},
@@ -80,7 +82,7 @@ void print_mnemonics_helper(std::uint32_t length, std::uint32_t digits,
 
 // recursive backtracking algorithm to pringt all words that could be expressed
 // (even unreasonable ones) using the keypad on a phone
-void print_mnemonics(std::uint32_t digits) {
+inline void print_mnemonics(std::uint32_t digits) {
     if (digits == 0) return;
 
     auto const length = pow(10,floor(log10(digits)));
@@ -90,7 +92,7 @@ void print_mnemonics(std::uint32_t digits) {
 // runlength encoding/decoding for non-digit strings (no error checking, requires valid input)
 namespace runlength
 {
-    std::string encode(std::string const& str)
+    inline std::string encode(std::string const& str)
     {
         std::ostringstream oss;
         auto itr = str.begin();
@@ -103,7 +105,7 @@ namespace runlength
         return oss.str();
     }
 
-    std::string decode(std::string const& str)
+    inline std::string decode(std::string const& str)
     {
         std::istringstream iss(str);
         std::ostringstream oss;
@@ -118,6 +120,48 @@ namespace runlength
         return oss.str();
     }
 } // namespace runlength
+
+namespace elias_gamma_code
+{
+    inline std::string encode(std::vector<std::uint32_t> const &data)
+    {
+        auto const to_binary = [](auto const val)
+        {
+            std::ostringstream oss;
+            oss << std::bitset<32>(val);
+            auto const str = oss.str();
+            return str.substr(str.find_first_of("1"));
+        };
+
+        std::ostringstream result;
+        for( auto val : data )
+        {
+            auto const str = to_binary(val);
+            auto len = str.size();
+            while(--len)
+                result << "0";
+            result << str;
+        }
+        return result.str();
+    }
+
+    inline std::vector<std::uint32_t> decode(std::string const& encoded)
+    {
+        std::vector<std::uint32_t> result;
+
+        std::size_t pos = 0;
+        while( pos < encoded.size())
+        {
+            auto start = encoded.find_first_of("1",pos);
+            auto len = start - pos + 1;
+            auto num = encoded.substr(start,len);
+            result.push_back(std::stoi(num,nullptr,2));
+            pos = start + len;
+        }
+
+        return result;
+    }
+} // namespace elias_gamma_code
 
 }  // namespace strings
 }  // namespace eopi
