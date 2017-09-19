@@ -56,5 +56,8 @@ int main() {
     for( auto v : decoded )
         std::cout << " " << v;
     std::cout << std::endl;
+
+    std::vector<std::string> justified = {"Hallo", "Welt", "was", "ist", "mit", "dir", "denn", "los"};
+    eopi::strings::print_justified(justified, 11);
     return 0;
 }

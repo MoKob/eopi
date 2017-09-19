@@ -163,6 +163,48 @@ namespace elias_gamma_code
     }
 } // namespace elias_gamma_code
 
+// print justified text
+inline void print_justified(std::vector<std::string> const& text, std::uint32_t const justification)
+{
+    for( std::size_t pos = 0, end = 0; pos < text.size(); pos = end)
+    {
+        std::uint32_t count = text[pos].size();
+        ++end;
+        while( end < text.size() && count + text[end].size() + 1 <= justification )
+        {
+            count += text[end].size() + 1;
+            ++end;
+        }
+
+        // last line, print unjustified
+        if( end == text.size() )
+        {
+            std::cout << text[pos];
+            for( auto i = pos+1; i < end; ++i )
+            {
+                std::cout << " " << text[i];
+            }
+            std::cout << std::endl;
+        } else // print justified 
+        {
+            auto const n = end - pos;
+            auto const spaces = justification - count + n - 1;
+            auto const sep = spaces / (n-1);
+
+            std::cout << text[pos];
+            for( auto i = 1; i < n; ++i)
+            {
+                // add spaces + additional one if we got a remainder
+                for( auto k = 0; k < sep + ((i-1 < (spaces % (n-1))) ? 1 : 0); ++k )
+                    std::cout << " ";
+
+                std::cout << text[pos+i];
+            }
+            std::cout << std::endl;
+        }
+    }
+}
+
 }  // namespace strings
 }  // namespace eopi
 
