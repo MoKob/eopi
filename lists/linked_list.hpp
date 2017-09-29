@@ -95,6 +95,27 @@ std::shared_ptr<ListNode<Payload>> merge(
     return head;
 }
 
+// reverse the content of a list
+template<typename Payload>
+std::shared_ptr<ListNode<Payload>> reverse(std::shared_ptr<ListNode<Payload>> head)
+{
+    // starting of with the new end of the list
+    std::shared_ptr<ListNode<Payload>> last = nullptr;
+
+    while( head->next )
+    {
+        auto next = head->next;
+        head->next = last;
+        last = head;
+        head = next;
+    }
+
+    head->next = last;
+
+    // the tail is the new head
+    return head;
+}
+
 }  // namespace algorithm
 
 }  // namespace lists

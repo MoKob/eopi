@@ -19,8 +19,14 @@ int main() {
     print(odd);
     print(even);
     cout << "Into:\n";
-    auto merged = eopi::lists::tool::to_vector(
+    auto merged_list =
         eopi::lists::algorithm::merge(eopi::lists::tool::from_vector(odd),
-                                      eopi::lists::tool::from_vector(even)));
+                                      eopi::lists::tool::from_vector(even));
+    auto merged =  eopi::lists::tool::to_vector(merged_list);
     print(merged);
+
+    auto reversed_list = eopi::lists::algorithm::reverse(merged_list);
+    auto reversed = eopi::lists::tool::to_vector(reversed_list);
+    cout << "Reversed:\n";
+    print(reversed);
 }
