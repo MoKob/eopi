@@ -116,6 +116,27 @@ std::shared_ptr<ListNode<Payload>> reverse(std::shared_ptr<ListNode<Payload>> he
     return head;
 }
 
+// check for cyclic pointers in a list, using no additional space
+template<typename Payload>
+bool is_cyclic(std::shared_ptr<ListNode<Payload>> list)
+{
+    auto quick = list;
+    auto slow = list;
+    while( quick )
+    {
+        quick = quick->next;
+        if( quick )
+            quick = quick->next;
+
+        slow = slow->next;
+
+        if( quick == slow )
+            return true;
+    }
+    // reached the end of the list
+    return false;
+}
+
 }  // namespace algorithm
 
 }  // namespace lists
