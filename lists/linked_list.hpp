@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cassert>
 #include <memory>
+#include <tuple>
 #include <vector>
 
 #include <iostream>
@@ -114,30 +115,29 @@ std::shared_ptr<ListNode<Payload>> reverse(
     return head;
 }
 
+// reverse a list in batches. Will only invert complete batches
 template <typename Payload>
 std::shared_ptr<ListNode<Payload>> reverse(
     std::shared_ptr<ListNode<Payload>> head, std::uint32_t const batch_size) {
     std::shared_ptr<ListNode<Payload>> tail = nullptr, result = head;
 
     auto batch_start = head;
-    do
-    {
+    do {
         auto batch_last = batch_start;
         std::uint32_t current_size = 0;
-        while( batch_last && current_size + 1 < batch_size )
+        while (batch_last && current_size + 1 < batch_size)
             current_size++, batch_last = batch_last->next;
 
         // do not reverse incomplete batches
-        if( current_size + 1 != batch_size )
-            return result;
+        if (current_size + 1 != batch_size) return result;
 
-        // remember the 
+        // remember the
         auto tmp = batch_last->next;
         batch_last->next = nullptr;
 
         // reverse and splice back in
-        if(tail) tail->next = 
-            reverse(batch_start);
+        if (tail)
+            tail->next = reverse(batch_start);
         else
             result = reverse(batch_start);
 
@@ -149,6 +149,46 @@ std::shared_ptr<ListNode<Payload>> reverse(
 
     return result;
 }
+
+// Find the first common node of two non-cyclic lists. Returns null, if no such
+// node exists
+template <typename Payload>
+std::shared_ptr<ListNode<Payload>> find_first_shared(
+    std::shared_ptr<ListNode<Payload>> const lhs,
+    std::shared_ptr<ListNode<Payload>> const rhs) {
+    auto const find_tail_and_length = [](auto head) {
+        std::size_t count = 1;
+        while (head->next) ++count, head = head->next;
+        return std::make_pair(count, head);
+    };
+
+    std::size_t size_lhs, size_rhs;
+    std::shared_ptr<ListNode<Payload>> tail_lhs, tail_rhs;
+
+    std::tie(size_lhs, tail_lhs) = find_tail_and_length(lhs);
+    std::tie(size_rhs, tail_rhs) = find_tail_and_length(rhs);
+
+    // two lists with a common node share a common tail
+    if (tail_lhs != tail_rhs) return nullptr;
+
+    // common tail, the first common node is at least min(size_lhs,size_rhs)
+    // from the end. Move the longer list ahead, so we are at the same distance
+    // from the end to the left and to the right
+
+    auto share_lhs = lhs;
+    auto share_rhs = rhs;
+
+    while( size_lhs > size_rhs)
+        --size_lhs, share_lhs = share_lhs->next;
+
+    while( size_rhs > size_lhs )
+        --size_rhs, share_rhs = share_rhs->next;
+
+    while( share_lhs != share_rhs )
+        share_lhs = share_lhs->next, share_rhs = share_rhs->next;
+
+    return share_lhs;
+};
 
 // check for cyclic pointers in a list, using no additional space
 template <typename Payload>
