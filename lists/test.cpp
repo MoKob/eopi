@@ -56,4 +56,13 @@ int main() {
 
     cout << "Can detect cycle: " << eopi::lists::algorithm::is_cyclic(cyclic)
          << endl;
+
+    auto seventeen = eopi::lists::tool::from_vector(std::vector<int>{
+        0,1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17});
+
+    auto batch_4 = eopi::lists::algorithm::reverse(seventeen, 4);
+
+    cout << "Reversing list 0-17 in batches of 4:\n";
+    auto batch_4_vec = eopi::lists::tool::to_vector(batch_4);
+    print(batch_4_vec);
 }

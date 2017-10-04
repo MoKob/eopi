@@ -17,8 +17,7 @@ struct ListNode {
     std::shared_ptr<ListNode<Payload>> next;
 
     ListNode(Payload data, std::shared_ptr<ListNode<Payload>> next)
-    : data(std::move(data)), next(std::move(next))
-    {}
+        : data(std::move(data)), next(std::move(next)) {}
 };
 
 namespace tool {
@@ -33,7 +32,7 @@ std::shared_ptr<ListNode<Payload>> from_vector(
 
     auto cur = head;
 
-    std::for_each(vec.begin()+1, vec.end(), [&cur](auto const& data) {
+    std::for_each(vec.begin() + 1, vec.end(), [&cur](auto const& data) {
         cur->next = std::make_shared<ListNode<Payload>>(data, nullptr);
         cur = cur->next;
     });
@@ -96,14 +95,13 @@ std::shared_ptr<ListNode<Payload>> merge(
 }
 
 // reverse the content of a list
-template<typename Payload>
-std::shared_ptr<ListNode<Payload>> reverse(std::shared_ptr<ListNode<Payload>> head)
-{
+template <typename Payload>
+std::shared_ptr<ListNode<Payload>> reverse(
+    std::shared_ptr<ListNode<Payload>> head) {
     // starting of with the new end of the list
     std::shared_ptr<ListNode<Payload>> last = nullptr;
 
-    while( head->next )
-    {
+    while (head->next) {
         auto next = head->next;
         head->next = last;
         last = head;
@@ -116,22 +114,54 @@ std::shared_ptr<ListNode<Payload>> reverse(std::shared_ptr<ListNode<Payload>> he
     return head;
 }
 
+template <typename Payload>
+std::shared_ptr<ListNode<Payload>> reverse(
+    std::shared_ptr<ListNode<Payload>> head, std::uint32_t const batch_size) {
+    std::shared_ptr<ListNode<Payload>> tail = nullptr, result = head;
+
+    auto batch_start = head;
+    do
+    {
+        auto batch_last = batch_start;
+        std::uint32_t current_size = 0;
+        while( batch_last && current_size + 1 < batch_size )
+            current_size++, batch_last = batch_last->next;
+
+        // do not reverse incomplete batches
+        if( current_size + 1 != batch_size )
+            return result;
+
+        // remember the 
+        auto tmp = batch_last->next;
+        batch_last->next = nullptr;
+
+        // reverse and splice back in
+        if(tail) tail->next = 
+            reverse(batch_start);
+        else
+            result = reverse(batch_start);
+
+        // splice back in
+        batch_start->next = tmp;
+        tail = batch_start;
+        batch_start = tmp;
+    } while (batch_start);
+
+    return result;
+}
+
 // check for cyclic pointers in a list, using no additional space
-template<typename Payload>
-bool is_cyclic(std::shared_ptr<ListNode<Payload>> list)
-{
+template <typename Payload>
+bool is_cyclic(std::shared_ptr<ListNode<Payload>> list) {
     auto quick = list;
     auto slow = list;
-    while( quick )
-    {
+    while (quick) {
         quick = quick->next;
-        if( quick )
-            quick = quick->next;
+        if (quick) quick = quick->next;
 
         slow = slow->next;
 
-        if( quick == slow )
-            return true;
+        if (quick == slow) return true;
     }
     // reached the end of the list
     return false;
