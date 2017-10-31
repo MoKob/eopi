@@ -1,6 +1,7 @@
 #include "lists/linked_list.hpp"
 
 #include <iostream>
+#include <numeric>
 #include <utility>
 #include <vector>
 
@@ -97,4 +98,32 @@ int main() {
        << eopi::lists::algorithm::find_first_shared(common.first, common.second)
               ->data
        << "\n";
+
+  cout << "Removing the 6th element from:\n";
+  print(batch_4_vec);
+  eopi::lists::algorithm::remove(eopi::lists::tool::get(batch_4, 6));
+  print(eopi::lists::tool::to_vector(batch_4));
+
+  vector<int> duplicates_vec = {0, 0, 0, 1, 2, 2, 2, 2, 2, 3, 4, 5, 5, 5};
+  cout << "Duplicate Removal:\n";
+  print(duplicates_vec);
+  auto duplicates = eopi::lists::tool::from_vector(duplicates_vec);
+  eopi::lists::algorithm::unique(duplicates);
+  auto uniqued = eopi::lists::tool::to_vector(duplicates);
+  cout << "After removal\n";
+  print(uniqued);
+
+  vector<int> count_odd(21);
+  vector<int> count_even(20);
+  std::iota(count_odd.begin(), count_odd.end(), 0);
+  std::iota(count_even.begin(), count_even.end(), 0);
+
+  auto lodd = eopi::lists::tool::from_vector(count_odd);
+  auto leven = eopi::lists::tool::from_vector(count_even);
+
+  auto even_odd_odd = eopi::lists::algorithm::even_odd(lodd);
+  auto even_odd_even = eopi::lists::algorithm::even_odd(leven);
+  cout << "Even Odds:\n";
+  print(eopi::lists::tool::to_vector(even_odd_odd));
+  print(eopi::lists::tool::to_vector(even_odd_even));
 }

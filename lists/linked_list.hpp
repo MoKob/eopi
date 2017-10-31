@@ -51,6 +51,15 @@ std::vector<Payload> to_vector(std::shared_ptr<ListNode<Payload>> list) {
   }
   return vec;
 }
+
+// get the k-th element from a list
+template <typename Payload>
+std::shared_ptr<ListNode<Payload>> get(std::shared_ptr<ListNode<Payload>> list,
+                                       std::uint32_t k) {
+  while (k-- && list)
+    list = list->next;
+  return list;
+}
 } // namespace tool
 
 namespace algorithm {
@@ -211,6 +220,85 @@ bool is_cyclic(std::shared_ptr<ListNode<Payload>> list) {
   }
   // reached the end of the list
   return false;
+}
+
+// remove an element from the list which is not last.
+template <typename Payload>
+std::shared_ptr<ListNode<Payload>>
+remove(std::shared_ptr<ListNode<Payload>> list) {
+  // we can only remove elemnts which are not last
+  if (list->next == nullptr)
+    return list;
+
+  list->data = list->next->data;
+  list->next = list->next->next;
+
+  return list;
+}
+
+template <typename Payload>
+std::shared_ptr<ListNode<Payload>>
+remove_after(std::shared_ptr<ListNode<Payload>> list) {
+  // we can only remove elemnts which are not last
+  if (list->next == nullptr)
+    return list;
+
+  list->next = list->next->next;
+
+  return list;
+}
+
+// remove the k to last element from a list, since the element can be the head,
+// the function returns the new head. Will remove head if k > |list|
+template <typename Payload>
+std::shared_ptr<ListNode<Payload>>
+remove(std::shared_ptr<ListNode<Payload>> head, std::uint32_t k) {
+  auto delta = tool::get(head, k + 1);
+  // we are in a list that isn't k in size
+  if (!delta) {
+    return remove(head);
+  }
+
+  auto pre_remove = head;
+  // skip ahead, til the end of the list
+  while (delta) {
+    delta = delta->next;
+    pre_remove = pre_remove->next;
+  }
+  remove_after(pre_remove);
+
+  return head;
+}
+
+template <typename Payload>
+void unique(std::shared_ptr<ListNode<Payload>> head) {
+  // as long as there are next elements, we either remove the following item (if
+  // it is the same as head) or advance to a new unique element
+  while (head->next) {
+    if (head->next->data == head->data)
+      head->next = head->next->next;
+    else
+      head = head->next;
+  }
+}
+
+// all even-index elements followed by all odd-index elements
+template <typename Payload>
+std::shared_ptr<ListNode<Payload>>
+even_odd(std::shared_ptr<ListNode<Payload>> head) {
+  // require at least two elements
+  if (!head->next)
+    return head;
+  auto even = head, odd = even->next, odd_head = even->next;
+  while (odd && odd->next) {
+    even->next = odd->next;
+    even = even->next;
+    odd->next = even->next;
+    odd = odd->next;
+  }
+  // connect the odd list to the even-list
+  even->next = odd_head;
+  return head;
 }
 
 } // namespace algorithm
