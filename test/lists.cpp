@@ -113,17 +113,35 @@ int main() {
   cout << "After removal\n";
   print(uniqued);
 
-  vector<int> count_odd(21);
-  vector<int> count_even(20);
-  std::iota(count_odd.begin(), count_odd.end(), 0);
-  std::iota(count_even.begin(), count_even.end(), 0);
+  {
+    vector<int> count_odd(21);
+    vector<int> count_even(20);
+    std::iota(count_odd.begin(), count_odd.end(), 0);
+    std::iota(count_even.begin(), count_even.end(), 0);
 
-  auto lodd = eopi::lists::tool::from_vector(count_odd);
-  auto leven = eopi::lists::tool::from_vector(count_even);
+    auto lodd = eopi::lists::tool::from_vector(count_odd);
+    auto leven = eopi::lists::tool::from_vector(count_even);
 
-  auto even_odd_odd = eopi::lists::algorithm::even_odd(lodd);
-  auto even_odd_even = eopi::lists::algorithm::even_odd(leven);
-  cout << "Even Odds:\n";
-  print(eopi::lists::tool::to_vector(even_odd_odd));
-  print(eopi::lists::tool::to_vector(even_odd_even));
+    auto even_odd_odd = eopi::lists::algorithm::even_odd(lodd);
+    auto even_odd_even = eopi::lists::algorithm::even_odd(leven);
+    cout << "Even Odds:\n";
+    print(eopi::lists::tool::to_vector(even_odd_odd));
+    print(eopi::lists::tool::to_vector(even_odd_even));
+  }
+
+  {
+    vector<int> count_odd(21);
+    vector<int> count_even(20);
+    std::iota(count_odd.begin(), count_odd.end(), 0);
+    std::iota(count_even.begin(), count_even.end(), 0);
+
+    auto lodd = eopi::lists::tool::from_vector(count_odd);
+    auto leven = eopi::lists::tool::from_vector(count_even);
+
+    auto even_odd_odd = eopi::lists::algorithm::zip(lodd);
+    auto even_odd_even = eopi::lists::algorithm::zip(leven);
+    cout << "Zip:\n";
+    print(eopi::lists::tool::to_vector(even_odd_odd));
+    print(eopi::lists::tool::to_vector(even_odd_even));
+  }
 }

@@ -301,6 +301,56 @@ even_odd(std::shared_ptr<ListNode<Payload>> head) {
   return head;
 }
 
+template <typename Payload>
+std::shared_ptr<ListNode<Payload>>
+interleave(std::shared_ptr<ListNode<Payload>> lhs,
+           std::shared_ptr<ListNode<Payload>> rhs) {
+  auto ret = lhs;
+
+  auto cur = lhs;
+  lhs = lhs->next;
+
+  while (lhs && rhs) {
+    cur->next = rhs;
+    rhs = rhs->next;
+    cur = cur->next;
+    cur->next = lhs;
+    lhs = lhs->next;
+    cur = cur->next;
+  }
+
+  if (lhs)
+    cur->next = lhs;
+
+  if (rhs)
+    cur->next = rhs;
+
+  return ret;
+}
+
+template <typename Payload>
+std::shared_ptr<ListNode<Payload>>
+zip(std::shared_ptr<ListNode<Payload>> head) {
+  // find the middle entry (O(N)):
+  auto fast = head, mid = head;
+  while (fast) {
+    fast = fast->next;
+    if (fast)
+      fast = fast->next;
+    mid = mid->next;
+  }
+
+  auto tmp = mid;
+  mid = mid->next;
+  tmp->next = nullptr;
+
+  // reverse the second part of the list
+  mid = reverse(mid);
+
+  // merge both lists for the final result
+  return interleave(head, mid);
+}
+
 } // namespace algorithm
 
 } // namespace lists
