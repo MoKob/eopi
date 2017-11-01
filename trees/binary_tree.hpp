@@ -5,6 +5,7 @@
 #include <memory>
 #include <stack>
 #include <utility>
+#include <vector>
 
 namespace eopi {
 namespace trees {
@@ -173,6 +174,51 @@ make_node(Payload const &data,
           std::shared_ptr<BinaryTreeNode<Payload>> left = nullptr,
           std::shared_ptr<BinaryTreeNode<Payload>> right = nullptr) {
   return std::make_shared<BinaryTreeNode<Payload>>(data, left, right);
+}
+
+// construct a binary tree from a given pre and in-order traversal
+template <typename Payload>
+std::shared_ptr<BinaryTreeNode<Payload>>
+build_tree(std::vector<Payload> const &pre_order,
+           std::vector<Payload> const &in_order) {
+  if (pre_order.empty() || pre_order.size() != in_order.size())
+    return nullptr;
+
+  std::shared_ptr<BinaryTreeNode<Payload>> tree = make_node(pre_order[0]);
+  std::stack<std::shared_ptr<BinaryTreeNode<Payload>>> stack;
+  stack.push(tree);
+  std::size_t io = 0, po = 0;
+
+  auto const left = [&]() {
+    po++;
+    if (po < pre_order.size()) {
+      stack.top()->left = make_node(pre_order[po]);
+      stack.push(stack.top()->left);
+    }
+  };
+
+  auto const right = [&]() {
+    po++;
+    auto cur = stack.top();
+    stack.pop();
+    if (po < pre_order.size()) {
+      cur->right = make_node(pre_order[po]);
+      stack.push(cur->right);
+    }
+  };
+
+  // loop over all elements
+  while (po < pre_order.size()) {
+    // middle of a tree (current root)
+    if (in_order[io] == stack.top()->data) {
+      right();
+    } else {
+      left();
+    }
+  }
+
+  stack.push(tree);
+  return tree;
 }
 
 } // namespace trees

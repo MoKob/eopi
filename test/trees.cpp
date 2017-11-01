@@ -60,4 +60,18 @@ int main() {
     eopi::trees::post_order(sym1, func);
     cout << endl;
   }
+
+  { // build a tree
+    vector<char> in_order = {'F', 'B', 'A', 'E', 'H', 'C', 'D', 'I', 'G'};
+    vector<char> pre_order = {'H', 'B', 'F', 'E', 'A', 'C', 'D', 'G', 'I'};
+    cout << "Pre-Order:";
+    for (auto c : pre_order)
+      cout << " " << c;
+    cout << endl;
+    auto tree = eopi::trees::build_tree(pre_order, in_order);
+    cout << "Preorder of build:";
+    auto func = [](auto const node) { std::cout << " " << node->data; };
+    eopi::trees::pre_order(tree, func);
+    cout << endl;
+  }
 }
