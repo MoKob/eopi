@@ -1,6 +1,8 @@
+#include "stacks/algorithms.hpp"
 #include "stacks/max_stack.hpp"
 
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -17,5 +19,12 @@ int main() {
            << endl;
       stack.pop();
     }
+  }
+
+  {
+    string braces = "((())()(()(";
+    cout << "Max valid in: " << braces << ": "
+         << eopi::stacks::algorithms::maximum_valid_bracket_substring(braces)
+         << endl;
   }
 }
