@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <stack>
 #include <utility>
 
 namespace eopi {
@@ -110,6 +111,60 @@ bool are_mirrored(std::shared_ptr<BinaryTreeNode<Payload>> lhs,
 template <typename Payload>
 bool symmetric(std::shared_ptr<BinaryTreeNode<Payload>> root) {
   return are_mirrored(root->left, root->right);
+}
+
+// call functor on tree nodes in pre-order
+template <typename Payload, typename functor>
+void pre_order(std::shared_ptr<BinaryTreeNode<Payload>> root, functor func) {
+  std::stack<std::shared_ptr<BinaryTreeNode<Payload>>> stack;
+  stack.push(root);
+
+  // do pre-order traversal of the tree
+  while (!stack.empty()) {
+    auto cur = stack.top();
+    stack.pop();
+    func(cur);
+    if (cur->right)
+      stack.push(cur->right);
+    if (cur->left)
+      stack.push(cur->left);
+  }
+}
+
+template <typename Payload, typename functor>
+void post_order(std::shared_ptr<BinaryTreeNode<Payload>> root, functor func) {
+  std::stack<std::shared_ptr<BinaryTreeNode<Payload>>> stack;
+  stack.push(root);
+
+  // do post-order traversal
+  // initialise previous vertex to null
+  std::shared_ptr<BinaryTreeNode<Payload>> prev = nullptr;
+  while (!stack.empty()) {
+    auto cur = stack.top();
+    // at a leaf node, output
+    if (!cur->left && !cur->right) {
+      func(cur);
+      stack.pop();
+    } else {
+      // either coming from the right or from the only child
+      if (prev == cur->right || (cur->right == nullptr && prev == cur->left)) {
+        // backtracking up the call-stack, call functor
+        func(cur);
+        stack.pop();
+      }
+      // coming from the top
+      else if (prev != cur->left) {
+        if (cur->right)
+          stack.push(cur->right);
+        if (cur->left)
+          stack.push(cur->left);
+      }
+      // else {
+      // coming from the left. The right node is already on the stack.
+      // }
+    }
+    prev = cur;
+  }
 }
 
 template <typename Payload>

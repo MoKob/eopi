@@ -51,5 +51,13 @@ int main() {
     cout << "Symmetric: " << eopi::trees::symmetric(sym1)
          << " Asym: " << eopi::trees::symmetric(asym1) << " and "
          << eopi::trees::symmetric(asym2) << endl;
+
+    cout << "Preorder Sym:";
+    auto func = [](auto const node) { std::cout << " " << node->data; };
+    eopi::trees::pre_order(sym1, func);
+    cout << endl;
+    cout << "Post-order:";
+    eopi::trees::post_order(sym1, func);
+    cout << endl;
   }
 }
