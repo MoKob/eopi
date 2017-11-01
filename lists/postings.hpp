@@ -1,3 +1,6 @@
+#ifndef EOPI_LISTS_POSTINGS_HPP_
+#define EOPI_LISTS_POSTINGS_HPP_
+
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -93,3 +96,5 @@ copy(std::shared_ptr<ListNode<Payload>> head) {
 } // namespace postings
 } // namespace lists
 } // namespace eopi
+
+#endif // EOPI_LISTS_POSTINGS_HPP_
