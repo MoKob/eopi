@@ -86,6 +86,32 @@ get_unbalanced(std::shared_ptr<BinaryTreeNode<Payload>> root,
   return detail::unbalanced_internal(root, k).first;
 }
 
+// check if one tree is a mirror of the other
+template <typename Payload>
+bool are_mirrored(std::shared_ptr<BinaryTreeNode<Payload>> lhs,
+                  std::shared_ptr<BinaryTreeNode<Payload>> rhs) {
+  // only one present
+  if (!lhs ^ !rhs)
+    return false;
+
+  // both not present, as a base case
+  if (!lhs && !rhs)
+    return true;
+
+  if (lhs->data != rhs->data)
+    return false;
+
+  // if both subtrees are mirrored too, we are good
+  return are_mirrored(lhs->right, rhs->left) &&
+         are_mirrored(lhs->left, rhs->right);
+}
+
+// check if a tree is symmetric
+template <typename Payload>
+bool symmetric(std::shared_ptr<BinaryTreeNode<Payload>> root) {
+  return are_mirrored(root->left, root->right);
+}
+
 template <typename Payload>
 std::shared_ptr<BinaryTreeNode<Payload>>
 make_node(Payload const &data,

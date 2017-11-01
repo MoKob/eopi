@@ -33,4 +33,23 @@ int main() {
     auto unbalanced = eopi::trees::get_unbalanced(tree, 3);
     cout << "K-unbalanced at: " << unbalanced->data << endl;
   }
+
+  { // symmetrics
+    using eopi::trees::make_node;
+    std::shared_ptr<eopi::trees::BinaryTreeNode<int>> null;
+    auto sym1 =
+        make_node(314, make_node(6, null, make_node(2, null, make_node(3))),
+                  make_node(6, make_node(2, make_node(3))));
+    auto asym1 =
+        make_node(314, make_node(6, null, make_node(561, null, make_node(3))),
+                  make_node(6, make_node(2, make_node(1))));
+
+    auto asym2 =
+        make_node(314, make_node(6, null, make_node(561, null, make_node(3))),
+                  make_node(6, make_node(561)));
+
+    cout << "Symmetric: " << eopi::trees::symmetric(sym1)
+         << " Asym: " << eopi::trees::symmetric(asym1) << " and "
+         << eopi::trees::symmetric(asym2) << endl;
+  }
 }
