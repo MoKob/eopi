@@ -33,3 +33,6 @@
 
 # Swapfiles
 *.swp
+
+# build
+build/*

@@ -1,4 +1,5 @@
 #include "lists/linked_list.hpp"
+#include "lists/postings.hpp"
 
 #include <iostream>
 #include <numeric>
@@ -143,5 +144,16 @@ int main() {
     cout << "Zip:\n";
     print(eopi::lists::tool::to_vector(even_odd_odd));
     print(eopi::lists::tool::to_vector(even_odd_even));
+  }
+
+  {
+    vector<int> elems(5);
+    std::iota(elems.begin(), elems.end(), 0);
+    auto postings = eopi::lists::postings::tool::generate_random_posts(elems);
+    eopi::lists::postings::tool::print_post(postings);
+    auto copy = eopi::lists::postings::algorithm::copy(postings);
+    cout << "Original and copy:\n";
+    eopi::lists::postings::tool::print_post(postings);
+    eopi::lists::postings::tool::print_post(copy);
   }
 }
