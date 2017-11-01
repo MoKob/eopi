@@ -51,6 +51,25 @@ std::uint64_t maximum_valid_bracket_substring(std::string const &braces) {
   return max_valid;
 }
 
+// recursively sort a stack (without release of memory, this requires O(N)
+// additional space. The algorithm essentialy follows the insertion sort
+// paradigm
+void sort_descending(std::stack<int> &stack) {
+  if (stack.empty())
+    return;
+
+  auto element = stack.top();
+  stack.pop();
+  sort_descending(stack);
+  if (stack.empty() || stack.top() < element) {
+    stack.push(element);
+  } else {
+    std::swap(stack.top(), element);
+    sort_descending(stack);
+    stack.push(element);
+  }
+}
+
 } // namespace algorithms
 } // namespace stacks
 } // namespace eopi

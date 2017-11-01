@@ -19,6 +19,11 @@ public:
     if (max_ptrs.empty() || values[max_ptrs.back()] < values.back())
       max_ptrs.push_back(values.size() - 1);
   }
+  void push(value_type const &value) {
+    values.push_back(value);
+    if (max_ptrs.empty() || values[max_ptrs.back()] < values.back())
+      max_ptrs.push_back(values.size() - 1);
+  }
 
   bool empty() const { return values.empty(); }
 
