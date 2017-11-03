@@ -137,9 +137,9 @@ std::size_t find_unbound(array_type const &array, value_type const &key) {
 
 // find the k-th largest element of the array represented by the merge of lhs
 // and rhs
-std::int32_t kth_element_dual(std::uint32_t k,
-                              std::vector<std::int32_t> const &lhs,
-                              std::vector<std::int32_t> const &rhs) {
+inline std::int32_t kth_element_dual(std::uint32_t k,
+                                     std::vector<std::int32_t> const &lhs,
+                                     std::vector<std::int32_t> const &rhs) {
 
   if (lhs.size() + rhs.size() < k)
     throw std::out_of_range("Supplied arrays do not offer K elements");
@@ -164,6 +164,21 @@ std::int32_t kth_element_dual(std::uint32_t k,
   }
 
   return std::min(lhs.front(), rhs.front());
+}
+
+// find a value in a 2d array
+inline bool find_2d(std::vector<std::vector<int>> const &field, int value) {
+  std::int32_t col = field[0].size() - 1, row = 0;
+  while (static_cast<std::size_t>(row) < field.size() && col >= 0) {
+    if (field[row][col] == value)
+      return true;
+    if (field[row][col] < value) {
+      ++row;
+    } else {
+      --col;
+    }
+  }
+  return false;
 }
 
 } // namespace algorithm

@@ -10,7 +10,7 @@ using namespace std;
 
 int main() {
   {
-    std::vector<int> data(20);
+    vector<int> data(20);
     iota(data.begin(), data.end(), 0);
 
     auto lower_bound =
@@ -42,7 +42,7 @@ int main() {
          << " when looking for the upper bound of 20" << endl;
   }
   {
-    std::vector<int> array = {-2, 0, 2, 3, 6, 7, 9};
+    vector<int> array = {-2, 0, 2, 3, 6, 7, 9};
     auto loc = eopi::search::algorithm::find_index_value_match(array);
     cout << "Values[" << loc << "] == " << array[loc] << endl;
   }
@@ -58,24 +58,34 @@ int main() {
     cout << "Pos of " << 140
          << " is: " << (eopi::search::algorithm::find_unbound(
                             array, static_cast<uint64_t>(140)) ==
-                                std::numeric_limits<std::size_t>::max()
+                                numeric_limits<size_t>::max()
                             ? "not found"
                             : " found, oh oh")
          << endl;
   }
   {
     // search two sorted arrays for the kth largest element
-    std::vector<std::int32_t> lhs = {1, 3, 5, 7, 9, 11, 13, 15, 17, 19};
-    std::vector<std::int32_t> rhs = {0, 2, 4, 6, 8, 10, 12, 14, 16, 18};
+    vector<int32_t> lhs = {1, 3, 5, 7, 9, 11, 13, 15, 17, 19};
+    vector<int32_t> rhs = {0, 2, 4, 6, 8, 10, 12, 14, 16, 18};
 
-    std::cout << "The 17th element is: "
-              << eopi::search::algorithm::kth_element_dual(17, lhs, rhs)
-              << std::endl;
-    std::cout << "The 0th element is: "
-              << eopi::search::algorithm::kth_element_dual(0, lhs, rhs)
-              << std::endl;
-    std::cout << "The 1th element is: "
-              << eopi::search::algorithm::kth_element_dual(1, lhs, rhs)
-              << std::endl;
+    cout << "The 17th element is: "
+         << eopi::search::algorithm::kth_element_dual(17, lhs, rhs) << endl;
+    cout << "The 0th element is: "
+         << eopi::search::algorithm::kth_element_dual(0, lhs, rhs) << endl;
+    cout << "The 1th element is: "
+         << eopi::search::algorithm::kth_element_dual(1, lhs, rhs) << endl;
+  }
+  {
+    // two-d search
+    vector<vector<int>> field;
+    field.push_back({-1, 2, 4, 4, 6});
+    field.push_back({1, 5, 5, 9, 21});
+    field.push_back({3, 6, 6, 9, 22});
+    field.push_back({3, 6, 6, 8, 24});
+    field.push_back({5, 8, 9, 12, 25});
+    field.push_back({8, 10, 12, 13, 40});
+
+    cout << "Field contains 7? : " << eopi::search::algorithm::find_2d(field, 7)
+         << " 8: " << eopi::search::algorithm::find_2d(field, 8) << endl;
   }
 }
