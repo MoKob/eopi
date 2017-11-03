@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <limits>
 #include <stdexcept>
+#include <utility>
 #include <vector>
 
 namespace eopi {
@@ -179,6 +180,32 @@ inline bool find_2d(std::vector<std::vector<int>> const &field, int value) {
     }
   }
   return false;
+}
+
+// find the min/max with less than 2n-1 comparisons
+template <typename value_type>
+std::pair<std::size_t, std::size_t>
+min_max(std::vector<value_type> const &data) {
+  std::size_t min = 0, max = 0;
+  for (std::size_t i = 0; i + 1 < data.size(); i += 2) {
+    std::size_t less = i, more = i + 1;
+    if (data[i + 1] < data[i]) {
+      less = i + 1;
+      more = i;
+    }
+
+    if (data[less] < data[min])
+      min = less;
+    if (data[max] < data[more])
+      max = more;
+  }
+  if (data.size() % 2 == 1) {
+    if (data.back() < data[min])
+      min = data.size() - 1;
+    if (data[max] < data.back())
+      max = data.size() - 1;
+  }
+  return {min, max};
 }
 
 } // namespace algorithm

@@ -88,4 +88,12 @@ int main() {
     cout << "Field contains 7? : " << eopi::search::algorithm::find_2d(field, 7)
          << " 8: " << eopi::search::algorithm::find_2d(field, 8) << endl;
   }
+  {
+    // min max
+    std::vector<int> data = {3, 2, 5, 1, 2, 4};
+    auto min_max = eopi::search::algorithm::min_max(data);
+    cout << "Min max are: " << min_max.first << " " << min_max.second
+         << " (Elements: " << data[min_max.first] << " " << data[min_max.second]
+         << ")" << std::endl;
+  }
 }
