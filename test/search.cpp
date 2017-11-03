@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cstdint>
 #include <iostream>
 #include <numeric>
 #include <vector>
@@ -20,5 +21,46 @@ int main() {
         eopi::search::algorithm::lower_bound(data.begin(), data.end(), 21);
     cout << "Found: " << (end == data.end() ? "the end" : "some data")
          << " when looking for 21" << endl;
+
+    auto end2 =
+        eopi::search::algorithm::lower_bound(data.begin(), data.end(), -1);
+    cout << "Found: " << (end2 == data.end() ? "the end" : "some data")
+         << " when looking for -1" << endl;
+
+    auto minus =
+        eopi::search::algorithm::upper_bound(data.begin(), data.end(), -1);
+    cout << "Found: " << *minus << " when searching for upper bound of -1"
+         << endl;
+
+    auto two =
+        eopi::search::algorithm::upper_bound(data.begin(), data.end(), 2);
+    cout << "Found: " << *two << " when searching for upper bound of 2" << endl;
+
+    auto twenty =
+        eopi::search::algorithm::upper_bound(data.begin(), data.end(), 20);
+    cout << "Found: " << (twenty == data.end() ? "the end" : "some data")
+         << " when looking for the upper bound of 20" << endl;
+  }
+  {
+    std::vector<int> array = {-2, 0, 2, 3, 6, 7, 9};
+    auto loc = eopi::search::algorithm::find_index_value_match(array);
+    cout << "Values[" << loc << "] == " << array[loc] << endl;
+  }
+  {
+    // identity array
+    auto array =
+        eopi::search::tool::make_array(137, [](auto const val) { return val; });
+
+    cout << "Pos of " << 37 << " is: " << eopi::search::algorithm::find_unbound(
+                                              array, static_cast<uint64_t>(37))
+         << endl;
+
+    cout << "Pos of " << 140
+         << " is: " << (eopi::search::algorithm::find_unbound(
+                            array, static_cast<uint64_t>(140)) ==
+                                std::numeric_limits<std::size_t>::max()
+                            ? "not found"
+                            : " found, oh oh")
+         << endl;
   }
 }
