@@ -14,6 +14,7 @@ macro(add_unit_test target source libs includes)
 endmacro()
 
 add_unit_test(arrays arrays.cpp "" "")
+add_unit_test(hash hash.cpp "" "")
 add_unit_test(heaps heaps.cpp "" "")
 add_unit_test(primitives primitives.cpp "" "")
 add_unit_test(lists lists.cpp "" "")
