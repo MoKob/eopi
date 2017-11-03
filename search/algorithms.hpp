@@ -208,6 +208,47 @@ min_max(std::vector<value_type> const &data) {
   return {min, max};
 }
 
+template <typename randitr, typename value_type>
+randitr partition(randitr begin, randitr end, value_type const pivot) {
+  randitr less = begin, equal = begin, larger = end;
+  while (equal != larger) {
+    if (*equal < pivot) {
+      std::swap(*less, *equal);
+      ++less;
+      ++equal;
+    } else if (*equal > pivot) {
+      --larger;
+      std::swap(*equal, *larger);
+    } else {
+      // equal
+      ++equal;
+    }
+  }
+  // end of the less range is the beginning of the qual range
+  return less;
+}
+
+template <typename value_type>
+value_type quick_select(std::size_t const k, std::vector<value_type> &data) {
+  std::size_t begin = 0, end = data.size();
+  while (begin < end) {
+    auto pivot = data[begin + (end - begin) / 2];
+
+    // partition into <= pivot, > pivot
+    auto const pivot_itr = eopi::search::algorithm::partition(
+        data.begin() + begin, data.begin() + end, pivot);
+    auto const pivot_index =
+        static_cast<std::size_t>(std::distance(data.begin(), pivot_itr));
+    if (pivot_index == k)
+      return pivot;
+    if (pivot_index < k)
+      begin = pivot_index + 1;
+    else
+      end = pivot_index;
+  }
+  throw std::out_of_range("Less than k elements provided");
+}
+
 } // namespace algorithm
 } // namespace search
 } // namespace eopi

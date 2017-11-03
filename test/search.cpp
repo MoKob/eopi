@@ -96,4 +96,9 @@ int main() {
          << " (Elements: " << data[min_max.first] << " " << data[min_max.second]
          << ")" << std::endl;
   }
+  {
+    std::vector<int> data = {3, 2, 5, 1, 2, 4};
+    auto second_smallest = eopi::search::algorithm::quick_select(2, data);
+    cout << "Second smallest is: " << second_smallest << endl;
+  }
 }
