@@ -1,6 +1,7 @@
 #ifndef EOPI_SEARCH_ALGORITHMS_HPP_
 #define EOPI_SEARCH_ALGORITHMS_HPP_
 
+#include <algorithm>
 #include <cstddef>
 #include <cstdint>
 #include <limits>
@@ -132,6 +133,37 @@ std::size_t find_unbound(array_type const &array, value_type const &key) {
   }
   // check if found
   return -1;
+}
+
+// find the k-th largest element of the array represented by the merge of lhs
+// and rhs
+std::int32_t kth_element_dual(std::uint32_t k,
+                              std::vector<std::int32_t> const &lhs,
+                              std::vector<std::int32_t> const &rhs) {
+
+  if (lhs.size() + rhs.size() < k)
+    throw std::out_of_range("Supplied arrays do not offer K elements");
+
+  // define a range [a,b] and x in [a,b] so that we use k-x elements from
+  // lhs and x elements from rhs
+  std::size_t begin = k < rhs.size() ? 0 : k - rhs.size(),
+              end = std::min<std::uint32_t>(lhs.size(), k);
+  // binary search for x on the range
+  while (begin < end) {
+    auto middle = begin + (end - begin) / 2;
+    auto candidate = std::min(lhs[middle], rhs[k - middle]);
+    if (k - middle + 1 < rhs.size() && rhs[k - middle + 1] < candidate) {
+      // we need to select at least k-middle+1 elements from rhs
+      end = middle;
+    } else if (middle + 1 < lhs.size() && lhs[middle + 1] < candidate) {
+      // we need more or equal to middle+1 elements from the lhs
+      begin = middle + 1;
+    } else {
+      return candidate;
+    }
+  }
+
+  return std::min(lhs.front(), rhs.front());
 }
 
 } // namespace algorithm

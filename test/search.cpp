@@ -63,4 +63,19 @@ int main() {
                             : " found, oh oh")
          << endl;
   }
+  {
+    // search two sorted arrays for the kth largest element
+    std::vector<std::int32_t> lhs = {1, 3, 5, 7, 9, 11, 13, 15, 17, 19};
+    std::vector<std::int32_t> rhs = {0, 2, 4, 6, 8, 10, 12, 14, 16, 18};
+
+    std::cout << "The 17th element is: "
+              << eopi::search::algorithm::kth_element_dual(17, lhs, rhs)
+              << std::endl;
+    std::cout << "The 0th element is: "
+              << eopi::search::algorithm::kth_element_dual(0, lhs, rhs)
+              << std::endl;
+    std::cout << "The 1th element is: "
+              << eopi::search::algorithm::kth_element_dual(1, lhs, rhs)
+              << std::endl;
+  }
 }
