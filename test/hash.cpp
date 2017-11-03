@@ -1,4 +1,5 @@
 #include "hash/algorithms.hpp"
+#include "hash/trie.hpp"
 
 #include <string>
 #include <vector>
@@ -47,5 +48,17 @@ int main() {
     for (std::size_t i = range.first; i < range.second; ++i)
       cout << " " << text[i];
     cout << endl;
+  }
+  { // compute prefix values;
+    eopi::hash::Trie trie;
+    trie.add("dog");
+    trie.add("be");
+    trie.add("cut");
+
+    cout << "Prefix : " << trie.shortest_unique_prefix("cat") << endl;
+    trie.add("car");
+    cout << "Prefix : " << trie.shortest_unique_prefix("cat") << endl;
+    trie.add("cat");
+    cout << "Prefix : " << trie.shortest_unique_prefix("cat") << endl;
   }
 }
