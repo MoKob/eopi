@@ -273,6 +273,26 @@ missing_and_duplicate(std::vector<std::uint32_t> const &values) {
   return {0, 0};
 }
 
+// in an array where each element is present exactly three times, except for one
+// which is present 1 times, fine the element present only once
+std::uint32_t once(std::vector<std::uint32_t> const &data) {
+  std::uint32_t lsb = 0, msb = 0;
+  for (auto v : data) {
+    // bitwise sum of v and the bit-sum stored in the combination of msb | lsb
+    // modulo three
+    auto carry = lsb & v;
+    // if carry == 1 for bit j, then msb[j] == 0
+    msb |= carry;
+    lsb ^= v;
+
+    // compute modulo three
+    auto both = lsb & msb;
+    msb ^= both;
+    lsb ^= both;
+  }
+  return lsb;
+}
+
 } // namespace algorithm
 } // namespace search
 } // namespace eopi

@@ -108,4 +108,9 @@ int main() {
     cout << "Found: " << miss_dup_res.first << " to be missing and "
          << miss_dup_res.second << " to be present twice." << endl;
   }
+  {
+    std::vector<uint32_t> once = {3, 1, 3, 4, 3, 1, 1};
+    cout << "once should be 4 and is: " << eopi::search::algorithm::once(once)
+         << endl;
+  }
 }
