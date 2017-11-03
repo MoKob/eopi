@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <limits>
+#include <numeric>
 #include <stdexcept>
 #include <utility>
 #include <vector>
@@ -247,6 +248,29 @@ value_type quick_select(std::size_t const k, std::vector<value_type> &data) {
       end = pivot_index;
   }
   throw std::out_of_range("Less than k elements provided");
+}
+
+// in a vector of distinc elements, except for a single one that has replaced a
+// missing number, find what is the missing and what is the duplicate
+std::pair<std::uint32_t, std::uint32_t>
+missing_and_duplicate(std::vector<std::uint32_t> const &values) {
+  std::uint64_t full_sum = values.size() * (values.size() + 1) / 2;
+  auto const part_sum =
+      std::accumulate(values.begin(), values.end(), std::uint64_t{0});
+  std::uint32_t full_xor = 0;
+  std::uint32_t part_xor = 0;
+  for (std::size_t i = 0; i < values.size(); ++i) {
+    full_xor ^= (i + 1);
+    part_xor ^= values[i];
+  }
+
+  auto miss_xor_dup = full_xor ^ part_xor;
+  for (std::uint32_t dup = 1; dup <= values.size(); ++dup) {
+    auto miss = miss_xor_dup ^ dup;
+    if (part_sum - dup + miss == full_sum)
+      return {miss, dup};
+  }
+  return {0, 0};
 }
 
 } // namespace algorithm

@@ -101,4 +101,11 @@ int main() {
     auto second_smallest = eopi::search::algorithm::quick_select(2, data);
     cout << "Second smallest is: " << second_smallest << endl;
   }
+  {
+    std::vector<uint32_t> miss_dup = {1, 2, 4, 4, 5, 6};
+    auto miss_dup_res =
+        eopi::search::algorithm::missing_and_duplicate(miss_dup);
+    cout << "Found: " << miss_dup_res.first << " to be missing and "
+         << miss_dup_res.second << " to be present twice." << endl;
+  }
 }
