@@ -38,8 +38,12 @@ private:
     if (key <= value) {
       if (left)
         return left->insert(key);
-      else
-        return insert(left);
+      else {
+        if (key == value)
+          return this;
+        else
+          return insert(left);
+      }
     } else {
       if (right)
         return right->insert(key);
@@ -63,6 +67,20 @@ private:
       else
         return last_larger;
     }
+  }
+
+  // the lowest common ancester in a binary search tree with unique keys can be
+  // computed by deciding if both nodes are to the left/right of a key. Only for
+  // equal values, the decision cannot be made without exploring the subtree
+  TreeNode<value_type> *lca(TreeNode<value_type> *lhs,
+                            TreeNode<value_type> *rhs) {
+    if (((lhs->value < value) != (rhs->value < value)) || lhs->value == value ||
+        rhs->value == value)
+      return this;
+    if (lhs->value < value)
+      return left->lca(lhs, rhs);
+    else
+      return right->lca(lhs, rhs);
   }
 
   value_type value;
@@ -93,6 +111,14 @@ public:
   TreeNodeType *upper_bound(value_type key) {
     if (root)
       return root->upper_bound(key, nullptr);
+    else
+      return nullptr;
+  }
+
+  // find the lowest common ancestor of a tree with unique keys
+  TreeNodeType *lca(TreeNodeType *lhs, TreeNodeType *rhs) {
+    if (root)
+      return root->lca(lhs, rhs);
     else
       return nullptr;
   }
