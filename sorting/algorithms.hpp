@@ -3,11 +3,47 @@
 
 #include <algorithm>
 #include <cstdint>
+#include <iterator>
+#include <unordered_map>
 #include <vector>
 
 namespace eopi {
 namespace sorting {
 namespace algorithms {
+
+template <typename container_type>
+void counting_sort(container_type &container) {
+  using key_type = typename container_type::value_type::key_type;
+  std::unordered_map<key_type, std::uint64_t> key_counts;
+  std::vector<key_type> unique_keys;
+  for (auto const &elem : container) {
+    auto const key = elem.key();
+    auto itr = key_counts.find(key);
+    if (itr == key_counts.end()) {
+      unique_keys.push_back(key);
+      key_counts[key] = 1;
+    } else {
+      itr->second++;
+    }
+  }
+
+  std::sort(unique_keys.begin(), unique_keys.end());
+  std::uint64_t target_pos = 0;
+  for (auto key : unique_keys) {
+    auto key_pos = target_pos;
+    target_pos += key_counts[key];
+    key_counts[key] = key_pos;
+  }
+
+  for (std::size_t i = 0; i < container.size(); ++i) {
+    auto next_pos = key_counts[container[i].key()];
+    while (i > next_pos) {
+      key_counts[container[i].key()]++;
+      std::swap(container[i], container[next_pos]);
+      next_pos = key_counts[container[i].key()];
+    }
+  }
+}
 
 // compute the set intersection of two lists
 inline std::vector<std::int32_t>

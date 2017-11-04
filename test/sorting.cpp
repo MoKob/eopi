@@ -35,4 +35,28 @@ int main() {
       cout << " (" << s.first << ", " << s.second << ")";
     cout << endl;
   }
+  {
+    struct object {
+      typedef char key_type;
+      key_type key() const { return c; }
+      char c;
+    };
+
+    vector<object> objects;
+    objects.push_back({'b'});
+    objects.push_back({'a'});
+    objects.push_back({'c'});
+    objects.push_back({'b'});
+    objects.push_back({'d'});
+    objects.push_back({'a'});
+    objects.push_back({'b'});
+    objects.push_back({'d'});
+
+    eopi::sorting::algorithms::counting_sort(objects);
+    cout << "Sorted:";
+    for (auto object : objects) {
+      cout << " " << object.c;
+    }
+    cout << endl;
+  }
 }
