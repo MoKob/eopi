@@ -15,8 +15,9 @@ int main() {
 
     cout << "Contained elements:";
     for (int i = 0; i < 20; ++i) {
+      auto itr = tree.upper_bound(i);
       cout << " " << i << ": " << (tree.find(i) == nullptr ? "no" : "yes")
-           << endl;
+           << " Upper bound: " << (itr ? *(*itr) : -1) << endl;
     }
   }
 }

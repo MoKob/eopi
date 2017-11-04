@@ -48,6 +48,23 @@ private:
     }
   }
 
+  TreeNode<value_type> *upper_bound(value_type const key,
+                                    TreeNode<value_type> *last_larger) {
+    if (key < value) {
+      // remember the current node as minimum element larget than key
+      if (left)
+        return left->upper_bound(key, this);
+      else
+        return this;
+    } else {
+      // key >= value -> value > key only in right tree
+      if (right)
+        return right->upper_bound(key, last_larger);
+      else
+        return last_larger;
+    }
+  }
+
   value_type value;
   std::unique_ptr<TreeNode<value_type>> left, right;
 };
@@ -63,6 +80,7 @@ public:
     else
       return nullptr;
   }
+
   TreeNodeType *insert(value_type key) {
     if (root)
       return root->insert(key);
@@ -70,6 +88,13 @@ public:
       root = std::make_unique<TreeNodeType>(key);
       return root.get();
     }
+  }
+
+  TreeNodeType *upper_bound(value_type key) {
+    if (root)
+      return root->upper_bound(key, nullptr);
+    else
+      return nullptr;
   }
 
 private:
