@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 #include "trees/binary_search_tree.hpp"
 
@@ -38,5 +39,29 @@ int main() {
          << tree.lca(tree.find(5), tree.find(2))->operator*() << endl;
     cout << "In a perfect bst, the lca of 1,3 is: "
          << tree.lca(tree.find(1), tree.find(3))->operator*() << endl;
+  }
+  { // in a constructed tree:
+    std::vector<int> data = {1, 2, 3, 4, 5, 6, 7};
+    auto const tree = eopi::trees::BinarySearchTreeFactory<int>::in_order(data);
+    cout << "Redoing in a constructed tree (in-order)" << endl;
+    cout << "In a perfect bst, the lca of 1,7 is: "
+         << tree.lca(tree.find(1), tree.find(4))->operator*() << endl;
+    cout << "In a perfect bst, the lca of 3,2 is: "
+         << tree.lca(tree.find(3), tree.find(2))->operator*() << endl;
+    cout << "In a perfect bst, the lca of 2,5 is: "
+         << tree.lca(tree.find(5), tree.find(2))->operator*() << endl;
+    cout << "In a perfect bst, the lca of 1,3 is: "
+         << tree.lca(tree.find(1), tree.find(3))->operator*() << endl;
+    tree.print();
+  }
+  {
+    // construct a post-order tree
+    std::vector<int> data = {19, 7,  3,  2,  5,  11, 17, 13,
+                             43, 23, 37, 29, 31, 41, 47, 53};
+
+    cout << "Tree in Figure 15.1" << endl;
+    auto const tree =
+        eopi::trees::BinarySearchTreeFactory<int>::pre_order(data);
+    tree.print();
   }
 }
