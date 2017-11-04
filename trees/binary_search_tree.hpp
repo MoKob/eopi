@@ -1,6 +1,7 @@
 #ifndef EOPI_TREES_BINARY_SEARCH_TREE_HPP_
 #define EOPI_TREES_BINARY_SEARCH_TREE_HPP_
 
+#include <cmath>
 #include <cstddef>
 #include <cstdint>
 #include <iostream>
@@ -39,7 +40,7 @@ private:
 
   TreeNode<value_type> const *insert(value_type const key) {
     auto const insert = [key](auto &child) {
-      child = std::make_unique<TreeNode<value_type>>(key);
+      child = std::make_shared<TreeNode<value_type>>(key);
       return child.get();
     };
 
@@ -78,7 +79,7 @@ private:
     }
   }
 
-  // the lowest common ancester in a binary search tree with unique keys can be
+  // the lowest common ancester in a binary search tree with shared keys can be
   // computed by deciding if both nodes are to the left/right of a key. Only for
   // equal values, the decision cannot be made without exploring the subtree
   TreeNode<value_type> const *lca(TreeNode<value_type> const *const lhs,
@@ -103,7 +104,7 @@ private:
   }
 
   value_type value;
-  std::unique_ptr<TreeNode<value_type>> left, right;
+  std::shared_ptr<TreeNode<value_type>> left, right;
 };
 
 template <typename value_type> class BinarySearchTree {
@@ -122,7 +123,7 @@ public:
     if (root)
       return root->insert(key);
     else {
-      root = std::make_unique<TreeNodeType>(key);
+      root = std::make_shared<TreeNodeType>(key);
       return root.get();
     }
   }
@@ -148,8 +149,47 @@ public:
       root->print();
   }
 
+  // transform a list form into a tree form
+  void from_list() {
+    // compute the length of the list
+    std::size_t len = 1;
+    auto cur = root->right;
+    while (cur != root) {
+      ++len;
+      cur = cur->right;
+    }
+    // the first element of the next subtree
+    auto next = root;
+    root = from_list_helper(&next, 0, len);
+  }
+
+  // transform a tree form into a list form
+  void list_from_tree() {}
+
 private:
-  std::unique_ptr<TreeNodeType> root;
+  std::shared_ptr<TreeNodeType> root;
+
+  // returns the root of the new tree
+  std::shared_ptr<TreeNodeType>
+  from_list_helper(std::shared_ptr<TreeNodeType> *next, std::size_t begin,
+                   std::size_t end) {
+    if (begin >= end)
+      return nullptr;
+
+    auto middle = begin + (end - begin) / 2;
+    auto left = from_list_helper(next, begin, middle);
+
+    // the entry contained in next now is the root of the current tree
+    auto local_root = *next;
+    // set the subtree (or null, if child)
+    local_root->left = left;
+
+    // it's right subtree starts of to the right;
+    *next = (*next)->right;
+    local_root->right = from_list_helper(next, middle + 1, end);
+
+    return local_root;
+  }
 
   friend class BinarySearchTreeFactory<value_type>;
 };
@@ -157,7 +197,7 @@ private:
 template <typename value_type> class BinarySearchTreeFactory {
 private:
   template <typename iterator_type>
-  static std::unique_ptr<TreeNode<value_type>> insert(iterator_type const begin,
+  static std::shared_ptr<TreeNode<value_type>> insert(iterator_type const begin,
                                                       iterator_type const end) {
     if (begin == end)
       return nullptr;
@@ -165,7 +205,7 @@ private:
     auto middle = std::distance(begin, end) / 2;
     iterator_type middle_itr = begin;
     std::advance(middle_itr, middle);
-    auto root = std::make_unique<TreeNode<value_type>>(*middle_itr);
+    auto root = std::make_shared<TreeNode<value_type>>(*middle_itr);
     root->left = insert(begin, middle_itr);
     root->right = insert(middle_itr + 1, end);
     return root;
@@ -188,12 +228,12 @@ public:
     BinarySearchTree<value_type> tree;
     if (order.empty())
       return tree;
-    tree.root = std::make_unique<TreeNode<value_type>>(order.front());
+    tree.root = std::make_shared<TreeNode<value_type>>(order.front());
     std::stack<TreeNode<value_type> *> path;
     path.push(tree.root.get());
     for (std::size_t i = 1; i < order.size(); ++i) {
       if (order[i] <= path.top()->value) {
-        path.top()->left = std::make_unique<TreeNode<value_type>>(order[i]);
+        path.top()->left = std::make_shared<TreeNode<value_type>>(order[i]);
         path.push(path.top()->left.get());
       } else {
         auto cur = path.top();
@@ -202,10 +242,29 @@ public:
           cur = path.top();
           path.pop();
         }
-        cur->right = std::make_unique<TreeNode<value_type>>(order[i]);
+        cur->right = std::make_shared<TreeNode<value_type>>(order[i]);
         path.push(cur->right.get());
       }
     }
+    return tree;
+  }
+
+  // interpreting a tree node in left->prev, right->next as doubly-linked list
+  static BinarySearchTree<value_type>
+  list(std::vector<value_type> const &values) {
+    BinarySearchTree<value_type> tree;
+    if (values.empty())
+      return tree;
+
+    tree.root = std::make_shared<TreeNode<value_type>>(values.front());
+    auto cur = tree.root;
+    for (std::size_t i = 1; i < values.size(); ++i) {
+      cur->right = std::make_shared<TreeNode<value_type>>(values[i]);
+      cur->right->left = cur;
+      cur = cur->right;
+    }
+    tree.root->left = cur;
+    cur->right = tree.root;
     return tree;
   }
 };

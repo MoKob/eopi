@@ -64,4 +64,11 @@ int main() {
         eopi::trees::BinarySearchTreeFactory<int>::pre_order(data);
     tree.print();
   }
+  {
+    std::vector<int> list_data = {2, 3, 5, 7, 11};
+    auto tree = eopi::trees::BinarySearchTreeFactory<int>::list(list_data);
+    tree.from_list();
+    cout << "Constructed from sorted list via transformation" << endl;
+    tree.print();
+  }
 }
