@@ -149,6 +149,18 @@ public:
       root->print();
   }
 
+  void print_list() const {
+    std::cout << "[list]";
+    if (root) {
+      auto cur = root;
+      do {
+        std::cout << " (" << cur->operator*() << " : " << cur << ")";
+        cur = cur->right;
+      } while (cur != root);
+    }
+    std::cout << std::endl;
+  }
+
   // transform a list form into a tree form
   void from_list() {
     // compute the length of the list
@@ -164,7 +176,15 @@ public:
   }
 
   // transform a tree form into a list form
-  void list_from_tree() {}
+  void to_list() {
+    // O(n)
+    auto begin_end = to_list_helper(root);
+
+    // close off the list
+    begin_end.first->left = begin_end.second;
+    begin_end.second->right = begin_end.first;
+    root = begin_end.first;
+  }
 
 private:
   std::shared_ptr<TreeNodeType> root;
@@ -189,6 +209,30 @@ private:
     local_root->right = from_list_helper(next, middle + 1, end);
 
     return local_root;
+  }
+
+  // returns the largest (last) node in the list
+  std::pair<std::shared_ptr<TreeNodeType>, std::shared_ptr<TreeNodeType>>
+  to_list_helper(std::shared_ptr<TreeNodeType> local_root) {
+    // below a leaf
+    if (local_root == nullptr)
+      return {nullptr, nullptr};
+
+    auto const connect = [](auto lhs, auto rhs) {
+      if (lhs)
+        lhs->right = rhs;
+      if (rhs)
+        rhs->left = lhs;
+    };
+
+    auto left = to_list_helper(local_root->left);
+    auto right = to_list_helper(local_root->right);
+
+    connect(left.second, local_root);
+    connect(local_root, right.first);
+
+    return {left.first ? left.first : local_root,
+            right.second ? right.second : local_root};
   }
 
   friend class BinarySearchTreeFactory<value_type>;

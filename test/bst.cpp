@@ -70,5 +70,9 @@ int main() {
     tree.from_list();
     cout << "Constructed from sorted list via transformation" << endl;
     tree.print();
+
+    cout << "Back into a list" << std::endl;
+    tree.to_list();
+    tree.print_list();
   }
 }
