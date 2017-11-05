@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <iostream>
+#include <vector>
 
 namespace eopi {
 namespace recursion {
@@ -10,7 +11,8 @@ namespace algorithms {
 
 namespace details {
 
-void hanoi_helper(std::int32_t from, std::int32_t to, std::uint32_t discs) {
+inline void hanoi_helper(std::int32_t from, std::int32_t to,
+                         std::uint32_t discs) {
   if (discs == 0)
     return;
   hanoi_helper(from, 3 - from - to, discs - 1);
@@ -20,8 +22,8 @@ void hanoi_helper(std::int32_t from, std::int32_t to, std::uint32_t discs) {
 }
 
 // check a known position for a match
-bool match_strict(std::string const &str, std::size_t pos_str,
-                  std::string const &regex, std::size_t pos_regex) {
+inline bool match_strict(std::string const &str, std::size_t pos_str,
+                         std::string const &regex, std::size_t pos_regex) {
   // advance the reg-ex from the current position
   for (; pos_str < str.size() && pos_regex < regex.size();
        ++pos_str, ++pos_regex) {
@@ -65,6 +67,23 @@ bool match_strict(std::string const &str, std::size_t pos_str,
   return true;
 }
 
+inline void list_permutations_helper(std::size_t pos, std::vector<int> &data) {
+  if (pos == data.size()) {
+    std::cout << "\t<";
+    for (auto d : data)
+      std::cout << " " << d;
+    std::cout << " >\n";
+  } else {
+    for (std::size_t p = pos; p < data.size(); ++p) {
+      // select p next
+      std::swap(data[pos], data[p]);
+      list_permutations_helper(pos + 1, data);
+      // restore
+      std::swap(data[pos], data[p]);
+    }
+  }
+}
+
 } // namespace details
 
 // print a sequence of moves to solve the towers of hanoi for n towers
@@ -83,6 +102,14 @@ inline bool esre_match(std::string str, std::string esre) {
   }
 
   return false;
+}
+
+// during the function, the data is permutated. After the function, data is
+// restored.
+// O(N!)
+inline void list_permutations(std::vector<int> &data) {
+  std::cout << "All permutations:\n";
+  details::list_permutations_helper(0, data);
 }
 
 } // namespace algorithms
