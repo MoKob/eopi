@@ -1,6 +1,8 @@
+#include "trees/algorithms.hpp"
 #include "trees/binary_tree.hpp"
 
 #include <iostream>
+#include <tuple>
 
 using namespace std;
 
@@ -73,5 +75,27 @@ int main() {
     auto func = [](auto const node) { std::cout << " " << node->data; };
     eopi::trees::pre_order(tree, func);
     cout << endl;
+  }
+  {
+    // view from above
+    vector<tuple<int, int, int, char>> ranges;
+    ranges.emplace_back(std::make_tuple(0, 0, 4, 'A'));
+    ranges.emplace_back(std::make_tuple(2, 1, 3, 'B'));
+    ranges.emplace_back(std::make_tuple(1, 2, 7, 'C'));
+    ranges.emplace_back(std::make_tuple(3, 4, 5, 'D'));
+    ranges.emplace_back(std::make_tuple(0, 5, 7, 'E'));
+    ranges.emplace_back(std::make_tuple(2, 6, 10, 'F'));
+    ranges.emplace_back(std::make_tuple(1, 8, 9, 'G'));
+    ranges.emplace_back(std::make_tuple(0, 9, 18, 'H'));
+    ranges.emplace_back(std::make_tuple(2, 11, 13, 'I'));
+    ranges.emplace_back(std::make_tuple(1, 12, 15, 'J'));
+    ranges.emplace_back(std::make_tuple(2, 14, 15, 'K'));
+    ranges.emplace_back(std::make_tuple(2, 16, 17, 'L'));
+
+    auto view = eopi::trees::algorithms::view_from_above(ranges);
+    cout << "[view from above]\n";
+    for (auto v : view) {
+      cout << "\t" << v.first << ": " << v.second << endl;
+    }
   }
 }
