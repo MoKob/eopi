@@ -75,4 +75,17 @@ int main() {
     tree.to_list();
     tree.print_list();
   }
+  {
+    std::vector<int> pre_order_lhs = {17, 5, 2, 11, 23},
+                     pre_order_rhs = {13, 7, 3, 19};
+    auto tree = eopi::trees::BinarySearchTreeFactory<int>::pre_order(
+             pre_order_lhs),
+         to_merge = eopi::trees::BinarySearchTreeFactory<int>::pre_order(
+             pre_order_rhs);
+
+    tree.merge(std::move(to_merge));
+
+    cout << "Merged tree from 15.4" << endl;
+    tree.print();
+  }
 }

@@ -186,8 +186,65 @@ public:
     root = begin_end.first;
   }
 
+  // merge another tree into the current tree. Move in, if other tree can be
+  // destroyed
+  void merge(BinarySearchTree<value_type> other) {
+    to_list();
+    other.to_list();
+    merge_list_helper(other);
+    from_list();
+  }
+
 private:
   std::shared_ptr<TreeNodeType> root;
+
+  void merge_list_helper(BinarySearchTree<value_type> &other) {
+    auto lhs = root;
+    auto rhs = other.root;
+    std::shared_ptr<TreeNodeType> list_end = nullptr;
+
+    // append an element to the end of the list
+    auto const append = [&list_end](auto ptr) {
+      list_end->right = *ptr;
+      (*ptr)->left = list_end;
+      list_end = *ptr;
+      *ptr = (*ptr)->right;
+    };
+
+    if (**lhs < **rhs) {
+      list_end = lhs;
+      lhs = lhs->right;
+    } else {
+      list_end = rhs;
+      rhs = lhs->right;
+    }
+
+    auto list_begin = list_end;
+
+    // still got elements to process?
+    while (!(**lhs < **list_end) && !(**rhs < **list_end)) {
+      if (**lhs < **rhs)
+        append(&lhs);
+      else
+        append(&rhs);
+    }
+
+    // append remaining elements in a single batch
+    if (lhs != root) {
+      list_end->right = lhs;
+      lhs->left = list_end;
+      list_end = root->left;
+    }
+    if (rhs != root) {
+      list_end->right = rhs;
+      rhs->left = list_end;
+      list_end = other.root->left;
+    }
+
+    // connect list in fron / back
+    list_end->right = list_begin;
+    list_begin->left = list_end;
+  }
 
   // returns the root of the new tree
   std::shared_ptr<TreeNodeType>
