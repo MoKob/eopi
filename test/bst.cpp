@@ -88,4 +88,16 @@ int main() {
     cout << "Merged tree from 15.4" << endl;
     tree.print();
   }
+  {
+    // construct a post-order tree
+    std::vector<int> data = {19, 7,  3,  2,  5,  11, 17, 13,
+                             43, 23, 37, 29, 31, 41, 47, 53};
+
+    auto const tree =
+        eopi::trees::BinarySearchTreeFactory<int>::pre_order(data);
+
+    cout << "Want 1 - 0: "
+         << tree.ordered(tree.find(23), tree.find(19), tree.find(29)) << " - "
+         << tree.ordered(tree.find(23), tree.find(43), tree.find(53)) << endl;
+  }
 }

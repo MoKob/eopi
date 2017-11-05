@@ -195,6 +195,25 @@ public:
     from_list();
   }
 
+  // check if lhs is a parent of mid and rhs a child of mid (or vice versa)
+  // O(h), potentially wasteful on close nodes
+  bool ordered(TreeNodeType const *const mid, TreeNodeType const *const lhs,
+               TreeNodeType const *const rhs) const {
+    // the nodes are ordered if a single node can be found from mid (O(logN))
+    // and mid can be found from the other one
+    auto lhs_find = mid->find(**lhs);
+    auto rhs_find = mid->find(**rhs);
+    if (lhs_find == nullptr) {
+      if (rhs_find == nullptr)
+        return false;
+      return lhs->find(**mid) != nullptr;
+    } else {
+      if (rhs_find != nullptr)
+        return false;
+      return rhs->find(**mid) != nullptr;
+    }
+  }
+
 private:
   std::shared_ptr<TreeNodeType> root;
 
