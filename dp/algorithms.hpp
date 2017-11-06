@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <numeric>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace eopi {
@@ -75,6 +76,20 @@ fishing_trip(std::vector<std::vector<std::int32_t>> const &values) {
   return last_row.back();
 }
 
+// compute the 0-1 knapsack problem, pseudopolinomial (capacity * |items|)
+std::uint32_t knapsack_zero_one(
+    std::vector<std::pair<std::uint32_t, std::uint32_t>> const &items,
+    std::uint32_t capacity) {
+  std::vector<std::uint32_t> values(capacity + 1, 0);
+
+  for (auto item : items) {
+    // weight > 0
+    for (std::size_t i = values.size() - 1; i >= item.second; --i) {
+      values[i] = std::max(values[i], values[i - item.second] + item.first);
+    }
+  }
+  return values.back();
+}
 } // namespace algorithms
 } // namespace dp
 } // namespace eopi
