@@ -84,6 +84,49 @@ inline void list_permutations_helper(std::size_t pos, std::vector<int> &data) {
   }
 }
 
+std::uint64_t inversions_helper(std::vector<int> &data, std::size_t begin,
+                                std::size_t end) {
+  if (begin + 1 >= end) {
+    return 0;
+  }
+  auto middle = begin + (end - begin) / 2;
+  auto result = inversions_helper(data, begin, middle) +
+                inversions_helper(data, middle, end);
+
+  // The elements prior to left are sorted, considering both elements
+  std::vector<int> tmp;
+  tmp.reserve(data.size());
+  auto sorted_range_end = std::back_inserter(tmp);
+
+  std::size_t left, right;
+  for (left = begin, right = middle; left < middle && right < end;) {
+    if (data[left] < data[right]) {
+      *sorted_range_end = data[left];
+      ++sorted_range_end;
+      ++left;
+    } else {
+      result += middle - left;
+      *sorted_range_end = data[right];
+      ++sorted_range_end;
+      ++right;
+    }
+  }
+
+  while (left < middle) {
+    *sorted_range_end = data[left];
+    ++sorted_range_end;
+    ++left;
+  }
+
+  while (right < end) {
+    *sorted_range_end = data[right];
+    ++sorted_range_end;
+    ++right;
+  }
+
+  return result;
+}
+
 } // namespace details
 
 // print a sequence of moves to solve the towers of hanoi for n towers
@@ -110,6 +153,12 @@ inline bool esre_match(std::string str, std::string esre) {
 inline void list_permutations(std::vector<int> &data) {
   std::cout << "All permutations:\n";
   details::list_permutations_helper(0, data);
+}
+
+// calculate the number of inversions in an array
+inline std::uint64_t inversions(std::vector<int> &data) {
+  // utilise merge sort to calculate the number of inversions
+  return details::inversions_helper(data, 0, data.size());
 }
 
 } // namespace algorithms
