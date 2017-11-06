@@ -161,6 +161,11 @@ inline std::uint64_t inversions(std::vector<int> &data) {
   return details::inversions_helper(data, 0, data.size());
 }
 
+struct PointT {
+  double x;
+  double y;
+};
+
 } // namespace algorithms
 } // namespace recursion
 } // namespace eopi

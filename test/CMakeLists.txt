@@ -15,6 +15,7 @@ endmacro()
 
 add_unit_test(arrays arrays.cpp "" "")
 add_unit_test(bst bst.cpp "" "")
+add_unit_test(dp dp.cpp "" "")
 add_unit_test(hash hash.cpp "" "")
 add_unit_test(heaps heaps.cpp "" "")
 add_unit_test(primitives primitives.cpp "" "")
