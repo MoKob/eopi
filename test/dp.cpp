@@ -39,4 +39,8 @@ int main() {
     cout << "Knapsack: " << eopi::dp::algorithms::knapsack_zero_one(values, 130)
          << endl;
   }
+  {
+    cout << "Measure: ";
+    eopi::dp::algorithms::measure(2100, 2300);
+  }
 }

@@ -4,16 +4,26 @@
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>
+#include <iostream>
 #include <numeric>
 #include <string>
+#include <unordered_set>
 #include <utility>
 #include <vector>
+
+namespace std {
+template <> struct hash<pair<uint32_t, uint32_t>> {
+  size_t operator()(pair<uint32_t, uint32_t> const &value) const {
+    return hash<uint32_t>()(value.first) ^ hash<uint32_t>()(value.second);
+  }
+};
+}
 
 namespace eopi {
 namespace dp {
 namespace algorithms {
 
-std::uint64_t football_combinations(std::int32_t final_score) {
+inline std::uint64_t football_combinations(std::int32_t final_score) {
   std::vector<std::uint64_t> combinations(final_score + 1, 0);
   std::vector<std::size_t> points = {2, 3, 7};
   combinations[0] = 1;
@@ -25,8 +35,8 @@ std::uint64_t football_combinations(std::int32_t final_score) {
   return combinations.back();
 }
 
-std::uint32_t levenshtein_distance(std::string const &lhs,
-                                   std::string const &rhs) {
+inline std::uint32_t levenshtein_distance(std::string const &lhs,
+                                          std::string const &rhs) {
   // go for minimum memory usage
   if (rhs.size() > lhs.size())
     return levenshtein_distance(rhs, lhs);
@@ -57,7 +67,7 @@ std::uint32_t levenshtein_distance(std::string const &lhs,
 
 // find the most valuable trip through a 2d array going only down and right
 // (top_left == [0][0])
-std::uint32_t
+inline std::uint32_t
 fishing_trip(std::vector<std::vector<std::int32_t>> const &values) {
   // for reducing additional memory usage, we only remember the current row and
   // the last row, since we need to go left and up in the DP
@@ -77,7 +87,7 @@ fishing_trip(std::vector<std::vector<std::int32_t>> const &values) {
 }
 
 // compute the 0-1 knapsack problem, pseudopolinomial (capacity * |items|)
-std::uint32_t knapsack_zero_one(
+inline std::uint32_t knapsack_zero_one(
     std::vector<std::pair<std::uint32_t, std::uint32_t>> const &items,
     std::uint32_t capacity) {
   std::vector<std::uint32_t> values(capacity + 1, 0);
@@ -90,6 +100,51 @@ std::uint32_t knapsack_zero_one(
   }
   return values.back();
 }
+
+inline bool measure_helper(
+    std::unordered_set<std::pair<std::uint32_t, std::uint32_t>> &cache,
+    std::uint32_t min, std::uint32_t max) {
+  // already found to be not possible
+  if (cache.count(std::make_pair(min, max)))
+    return false;
+
+  if (min <= 230 && max >= 240) {
+    std::cout << "A";
+    return true;
+  } else if (min <= 290 && max >= 310) {
+    std::cout << "B";
+    return true;
+  } else if (min <= 500 && max >= 515) {
+    std::cout << "C";
+    return true;
+  }
+
+  if (min > 230 && max > 240 && measure_helper(cache, min - 230, max - 240)) {
+    std::cout << "A";
+    return true;
+  }
+  if (min > 290 && max > 310 && measure_helper(cache, min - 290, max - 310)) {
+    std::cout << "B";
+    return true;
+  }
+  if (min > 500 && max > 515 && measure_helper(cache, min - 500, max - 515)) {
+    std::cout << "C";
+    return true;
+  }
+
+  // not possible
+  cache.insert(std::make_pair(min, max));
+  return false;
+}
+
+inline bool measure(std::uint32_t min, std::uint32_t max) {
+  std::unordered_set<std::pair<std::uint32_t, std::uint32_t>> cache;
+  auto res = measure_helper(cache, min, max);
+  if (res)
+    std::cout << std::endl;
+  return res;
+}
+
 } // namespace algorithms
 } // namespace dp
 } // namespace eopi
