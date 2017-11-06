@@ -1,7 +1,10 @@
 #ifndef EOPI_DP_ALGORITHMS_HPP_
 #define EOPI_DP_ALGORITHMS_HPP_
 
+#include <algorithm>
 #include <cstdint>
+#include <numeric>
+#include <string>
 #include <vector>
 
 namespace eopi {
@@ -18,6 +21,36 @@ std::uint64_t football_combinations(std::int32_t final_score) {
     }
   }
   return combinations.back();
+}
+
+std::uint32_t levenshtein_distance(std::string const &lhs,
+                                   std::string const &rhs) {
+  // go for minimum memory usage
+  if (rhs.size() > lhs.size())
+    return levenshtein_distance(rhs, lhs);
+
+  // Koenig swap
+  using std::swap;
+  // the previous row and the current row allow accessing the DP data, swapped
+  // for every row
+  std::vector<int> last_row(rhs.size() + 1, 0), current_row(rhs.size() + 1);
+  std::iota(last_row.begin(), last_row.end(), 0);
+  for (std::size_t i = 0; i < lhs.size(); ++i) {
+    current_row[0] = i;
+    for (std::size_t j = 0; j < rhs.size(); ++j) {
+      current_row[j + 1] =
+          std::min(last_row[j + 1] + 1, current_row[j - 1] + 1);
+      if (lhs[i] == rhs[j])
+        current_row[j + 1] = std::min(current_row[j + 1], last_row[j]);
+      else
+        current_row[j + 1] = std::min(current_row[j + 1], last_row[j]) + 1;
+    }
+    swap(last_row, current_row);
+  }
+
+  // the full edit distance is (due to the final swap) in the last_row, instead
+  // of the current_row
+  return last_row.back();
 }
 
 } // namespace algorithms
