@@ -145,6 +145,38 @@ inline bool measure(std::uint32_t min, std::uint32_t max) {
   return res;
 }
 
+// in contrast to the linear case, we need to walk through the array twice. In
+// addition to the best value, we also track the current length. If the length
+// is > n, there is a positive loop and no optimum exists (infinite optimum)
+inline std::uint64_t
+max_subarray_sum_cyclic(std::vector<std::int32_t> const &values) {
+  std::uint64_t prev = 0;
+  std::uint64_t length = 0;
+  std::uint64_t best = 0;
+
+  for (std::size_t i = 0; i < 2 * values.size(); ++i) {
+    auto val = values[i % values.size()];
+    // we summed the full array
+    if (length >= values.size()) {
+      do {
+        val -= values[i - length];
+        --length;
+        // skip over all negatives as well
+      } while (length && values[i - length] < 0);
+    }
+    if (val >= 0 || static_cast<std::uint64_t>(std::abs(val)) < prev) {
+      prev += val;
+      length++;
+      best = std::max(best, prev);
+    } else {
+      // total sum becomes negative, start a new sequence
+      prev = 0;
+      length = 0;
+    }
+  }
+  return best;
+}
+
 } // namespace algorithms
 } // namespace dp
 } // namespace eopi

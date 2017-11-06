@@ -43,4 +43,9 @@ int main() {
     cout << "Measure: ";
     eopi::dp::algorithms::measure(2100, 2300);
   }
+  {
+    vector<int32_t> data = {904, 40, 523, 12, -335, -385, -124, 481, -31};
+    cout << "Subset sum: "
+         << eopi::dp::algorithms::max_subarray_sum_cyclic(data) << endl;
+  }
 }
