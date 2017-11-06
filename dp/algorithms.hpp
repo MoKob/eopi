@@ -2,6 +2,7 @@
 #define EOPI_DP_ALGORITHMS_HPP_
 
 #include <algorithm>
+#include <cstddef>
 #include <cstdint>
 #include <numeric>
 #include <string>
@@ -50,6 +51,27 @@ std::uint32_t levenshtein_distance(std::string const &lhs,
 
   // the full edit distance is (due to the final swap) in the last_row, instead
   // of the current_row
+  return last_row.back();
+}
+
+// find the most valuable trip through a 2d array going only down and right
+// (top_left == [0][0])
+std::uint32_t
+fishing_trip(std::vector<std::vector<std::int32_t>> const &values) {
+  // for reducing additional memory usage, we only remember the current row and
+  // the last row, since we need to go left and up in the DP
+  std::vector<std::uint32_t> last_row(values.size() + 1, 0),
+      current_row(values.size() + 1, 0);
+
+  using std::swap;
+  // lower right is the desired value
+  for (std::size_t row = 0; row < values.size(); ++row) {
+    for (std::size_t col = 0; col < values[0].size(); ++col) {
+      current_row[col + 1] =
+          std::max(current_row[col], last_row[col + 1]) + values[row][col];
+    }
+    swap(last_row, current_row);
+  }
   return last_row.back();
 }
 
