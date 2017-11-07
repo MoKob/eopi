@@ -274,6 +274,77 @@ longest_nondecreasing_subsequence(std::vector<std::int32_t> const &data) {
   return result;
 }
 
+// compute the maximum sub-array that is all set to true
+inline std::tuple<std::uint32_t, std::uint32_t, std::uint32_t, std::uint32_t>
+max_subarray(std::vector<std::vector<bool>> const &field,
+             const bool quadratic) {
+  // for every element of the array, compute the number of 1s to the left/under
+  // of a position
+  std::vector<std::vector<std::uint32_t>> left_of(
+      field.size(), std::vector<std::uint32_t>(field[0].size(), 0));
+  std::vector<std::vector<std::uint32_t>> under_of(
+      field.size(), std::vector<std::uint32_t>(field[0].size(), 0));
+
+  for (std::size_t row = 0; row < field.size(); ++row) {
+    for (std::size_t col = 0; col < field[0].size(); ++col) {
+      if (field[row][col]) {
+        left_of[row][col] = under_of[row][col] = 1;
+        if (col > 0)
+          left_of[row][col] += left_of[row][col - 1];
+        if (row > 0)
+          under_of[row][col] += under_of[row - 1][col];
+      }
+      // if the field is 0, no length array starts here and the initialisation
+      // is already correct
+    }
+  }
+
+  std::vector<std::vector<std::pair<std::uint32_t, std::uint32_t>>> max_size(
+      field.size(),
+      std::vector<std::pair<std::uint32_t, std::uint32_t>>(field[0].size()));
+
+  for (std::size_t row = 0; row < field.size(); ++row) {
+    for (std::size_t col = 0; col < field[row].size(); ++col) {
+      if (!field[row][col])
+        continue;
+
+      if (quadratic) {
+        auto size = std::min(under_of[row][col], left_of[row][col]);
+        if (row > 0 && col > 0)
+          size = std::min(max_size[row - 1][col - 1].first + 1, size);
+        max_size[row][col] = std::make_pair(size, size);
+      } else {
+        std::uint32_t max_height = under_of[row][col];
+        for (std::size_t i = 0; i <= col && max_height > 0; ++i) {
+          max_height = std::min(under_of[row][col - i], max_height);
+          auto size = max_height * (i + 1);
+          if (size > max_size[row][col].first * max_size[row][col].second) {
+            max_size[row][col] = std::make_pair(max_height, i + 1);
+          }
+        }
+      }
+    }
+  }
+
+  // find the maximum over all arrays
+  std::uint32_t best_row = 0, best_col = 0, best = 0;
+
+  for (std::size_t row = 0; row < field.size(); ++row) {
+    for (std::size_t col = 0; col < field[0].size(); ++col) {
+      auto cur = max_size[row][col].first * max_size[row][col].second;
+      if (cur > best) {
+        best_row = row;
+        best_col = col;
+        best = cur;
+      }
+    }
+  }
+
+  return {best_row - max_size[best_row][best_col].first + 1,
+          best_col - max_size[best_row][best_col].second + 1, best_row,
+          best_col};
+}
+
 } // namespace algorithms
 } // namespace dp
 } // namespace eopi

@@ -1,5 +1,6 @@
 #include <cstdint>
 #include <iostream>
+#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -63,5 +64,20 @@ int main() {
     for (auto e : lndss)
       cout << " " << e;
     cout << endl;
+  }
+  {
+    vector<vector<bool>> field = {{false, true, false, false, false},
+                                  {false, true, false, true, true},
+                                  {true, true, true, true, true},
+                                  {false, true, true, true, false}};
+    auto max_rect = eopi::dp::algorithms::max_subarray(field, false);
+    auto max_square = eopi::dp::algorithms::max_subarray(field, true);
+
+    cout << "Max Rect: (" << std::get<0>(max_rect) << ","
+         << std::get<1>(max_rect) << ") - (" << std::get<2>(max_rect) << ","
+         << std::get<3>(max_rect) << ")" << endl;
+    cout << "Max Square: (" << std::get<0>(max_square) << ","
+         << std::get<1>(max_square) << ") - (" << std::get<2>(max_square) << ","
+         << std::get<3>(max_square) << ")" << endl;
   }
 }
