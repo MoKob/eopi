@@ -48,4 +48,20 @@ int main() {
     cout << "Subset sum: "
          << eopi::dp::algorithms::max_subarray_sum_cyclic(data) << endl;
   }
+  { cout << "Floors: " << eopi::dp::algorithms::critical_case(1, 15) << endl; }
+  { cout << "Floors: " << eopi::dp::algorithms::critical_case(2, 15) << endl; }
+  {
+    vector<uint32_t> data = {25, 5,  10, 5,  10, 5,  10, 25,
+                             1,  25, 1,  25, 1,  25, 5,  10};
+    cout << "Max gain player 1: " << eopi::dp::algorithms::max_coin_gain(data)
+         << endl;
+  }
+  {
+    vector<int32_t> data = {0, 8, 4, 12, 2, 10, 6, 14, 1, 9};
+    auto lndss = eopi::dp::algorithms::longest_nondecreasing_subsequence(data);
+    cout << "Sequence:";
+    for (auto e : lndss)
+      cout << " " << e;
+    cout << endl;
+  }
 }

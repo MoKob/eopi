@@ -7,6 +7,7 @@
 #include <iostream>
 #include <numeric>
 #include <string>
+#include <unordered_map>
 #include <unordered_set>
 #include <utility>
 #include <vector>
@@ -175,6 +176,102 @@ max_subarray_sum_cyclic(std::vector<std::int32_t> const &values) {
     }
   }
   return best;
+}
+
+inline std::uint64_t critical_case_helper(
+    std::unordered_map<std::pair<std::uint32_t, std::uint32_t>, std::uint64_t>
+        &cache,
+    std::uint32_t const cases, std::uint32_t const drops) {
+  // base cases
+  if (cases == 1)
+    return drops;
+  if (cases == 0 || drops == 0)
+    return 0;
+
+  auto params = std::make_pair(cases, drops);
+  auto itr = cache.find(params);
+  if (itr != cache.end())
+    return itr->second;
+
+  cache[params] = critical_case_helper(cache, cases - 1, drops - 1) + 1 +
+                  critical_case_helper(cache, cases, drops - 1);
+  return cache[params];
+}
+
+inline std::uint64_t critical_case(std::uint32_t const cases,
+                                   std::uint32_t const drops) {
+  std::unordered_map<std::pair<std::uint32_t, std::uint32_t>, std::uint64_t>
+      cache;
+  return critical_case_helper(cache, cases, drops);
+}
+
+inline std::uint32_t max_coin_gain_helper(
+    std::vector<std::uint32_t> const &values,
+    std::unordered_map<std::pair<std::uint32_t, std::uint32_t>, std::uint64_t>
+        &cache,
+    std::size_t begin, std::size_t end, std::uint64_t total_sum) {
+  // if only a single coin is left, it is the gain
+  if (begin + 1 == end)
+    return values[begin];
+
+  auto params = std::make_pair(begin, end);
+  if (cache.count(params))
+    return cache[params];
+
+  cache[params] =
+      std::max((total_sum - max_coin_gain_helper(values, cache, begin + 1, end,
+                                                 total_sum - values[begin])),
+               (total_sum - max_coin_gain_helper(values, cache, begin, end - 1,
+                                                 total_sum - values[end - 1])));
+
+  return cache[params];
+}
+
+inline std::uint32_t max_coin_gain(std::vector<std::uint32_t> const &values) {
+  std::unordered_map<std::pair<std::uint32_t, std::uint32_t>, std::uint64_t>
+      cache;
+  auto total = std::accumulate(values.begin(), values.end(), 0);
+  auto max_profit =
+      max_coin_gain_helper(values, cache, 0, values.size(), total);
+  std::cout << "Total: " << total << " Profit: " << max_profit << std::endl;
+  return 2 * max_profit - total;
+}
+
+// find a non-decreasing subsequence (A_i <= A_j for i < j) within data
+inline std::vector<std::int32_t>
+longest_nondecreasing_subsequence(std::vector<std::int32_t> const &data) {
+  // for every possible length, remember the smallest possible tail
+  std::vector<std::int32_t> tails;
+  // the positions of the tails within the array
+  std::vector<std::int32_t> positions;
+  // for every data entry, we remember the previous entry if it is part of our
+  // list of tails
+  std::vector<std::int32_t> parents(data.size(), -1);
+  for (std::size_t i = 0; i < data.size(); ++i) {
+    auto itr = std::upper_bound(tails.begin(), tails.end(), data[i]);
+    if (itr == tails.end()) {
+      if (!tails.empty()) {
+        parents[i] = tails.back();
+      }
+      positions.push_back(i);
+      tails.push_back(data[i]);
+    } else {
+      auto pos = std::distance(tails.begin(), itr);
+      if (itr != tails.begin()) {
+        parents[i] = positions[pos - 1];
+      }
+      *itr = data[i];
+      positions[pos] = i;
+    }
+  }
+  std::vector<std::int32_t> result;
+  auto cur = positions.back();
+  while (cur != -1) {
+    result.push_back(data[cur]);
+    cur = parents[cur];
+  }
+  std::reverse(result.begin(), result.end());
+  return result;
 }
 
 } // namespace algorithms
