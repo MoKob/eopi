@@ -2,6 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <vector>
 
 #include "arrays/variants.hpp"
 
@@ -31,8 +32,21 @@ void test_trim() {
             << std::endl;
 }
 
+void test_mult_array() {
+  auto print = [](auto const &data) {
+    std::cout << "[data]";
+    for (auto d : data)
+      std::cout << " " << d;
+    std::cout << std::endl;
+  };
+  std::vector<int> A = {-1, 2, 3, -4};
+  print(A);
+  print(eopi::array::mult_array(A));
+}
+
 int main() {
   test_addition();
   test_trim();
+  test_mult_array();
   return 0;
 }

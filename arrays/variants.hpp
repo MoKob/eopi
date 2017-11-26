@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cstddef>
 #include <string>
+#include <vector>
 
 namespace eopi {
 namespace array {
@@ -59,6 +60,22 @@ std::string inplace_trim(std::string str) {
     str.pop_back();
 
   return str;
+}
+
+// return an vector consisting of all multiplications of elements of A, except
+// for A[i] in B[i] without using division
+std::vector<int> mult_array(std::vector<int> const &A) {
+  auto helper = [](auto itr_a, auto end_a, auto itr_b) {
+    int val = 1;
+    for (; itr_a != end_a; ++itr_a, ++itr_b) {
+      *itr_b *= val;
+      val *= *itr_a;
+    }
+  };
+  std::vector<int> B(A.size(), 1);
+  helper(A.begin(), A.end(), B.begin());
+  helper(A.rbegin(), A.rend(), B.rbegin());
+  return B;
 }
 
 } // namespace array
