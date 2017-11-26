@@ -38,6 +38,29 @@ inline std::string add_bitstrings(std::string lhs, std::string rhs) {
   return lhs;
 }
 
+std::string inplace_trim(std::string str) {
+  auto trimmed_end = str.begin();
+  auto cur = str.begin();
+
+  // skip over initial spaces
+  while (cur != str.end() && *cur == ' ')
+    ++cur;
+
+  while (cur != str.end()) {
+    if (*cur != ' ' || *(trimmed_end - 1) != ' ') {
+      *trimmed_end = *cur;
+      ++trimmed_end;
+    }
+    ++cur;
+  }
+
+  str.erase(trimmed_end, str.end());
+  if (!str.empty() && str.back() == ' ')
+    str.pop_back();
+
+  return str;
+}
+
 } // namespace array
 } // namespace eopi
 

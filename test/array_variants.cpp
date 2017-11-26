@@ -25,7 +25,14 @@ void test_addition() {
             << std::endl;
 }
 
+void test_trim() {
+  std::cout << "Reasonable spaces in:\n";
+  std::cout << "\"" << eopi::array::inplace_trim("   Hello    World!  ") << "\""
+            << std::endl;
+}
+
 int main() {
   test_addition();
+  test_trim();
   return 0;
 }
