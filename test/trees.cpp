@@ -98,4 +98,17 @@ int main() {
       cout << "\t" << v.first << ": " << v.second << endl;
     }
   }
+  {
+    using eopi::trees::make_node;
+    std::shared_ptr<eopi::trees::BinaryTreeNode<int>> null;
+    auto tree = make_node(
+        314, make_node(6, make_node(271, make_node(28), make_node(0)),
+                       make_node(561, null, make_node(3, make_node(17)))),
+        make_node(6, make_node(2, null, make_node(1, make_node(401, null,
+                                                               make_node(641)),
+                                                  make_node(257))),
+                  make_node(271, null, make_node(28))));
+
+    eopi::trees::print_levels_alternating(tree);
+  }
 }

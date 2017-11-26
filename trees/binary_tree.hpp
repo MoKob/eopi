@@ -2,6 +2,7 @@
 #define EOPI_TREES_BINARY_TREE_HPP_
 
 #include <cstdint>
+#include <iostream>
 #include <memory>
 #include <stack>
 #include <utility>
@@ -219,6 +220,39 @@ build_tree(std::vector<Payload> const &pre_order,
 
   stack.push(tree);
   return tree;
+}
+
+template <typename Payload>
+void print_levels_alternating(std::shared_ptr<BinaryTreeNode<Payload>> root) {
+  std::stack<std::shared_ptr<BinaryTreeNode<Payload>>> left_first, right_first;
+  left_first.push(root);
+
+  while (!left_first.empty()) {
+    // print even levels (0,2,...)
+    while (!left_first.empty()) {
+      std::cout << " " << left_first.top()->data;
+      auto node = left_first.top();
+      left_first.pop();
+      if (node->left)
+        right_first.push(node->left);
+      if (node->right)
+        right_first.push(node->right);
+    }
+    std::cout << std::endl;
+    // print odd levels (1,3,...)
+    if (!right_first.empty()) {
+      while (!right_first.empty()) {
+        auto node = right_first.top();
+        right_first.pop();
+        std::cout << " " << node->data;
+        if (node->right)
+          left_first.push(node->right);
+        if (node->left)
+          left_first.push(node->left);
+      }
+      std::cout << std::endl;
+    }
+  }
 }
 
 } // namespace trees
